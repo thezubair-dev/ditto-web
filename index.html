@@ -245,11 +245,11 @@
       const heroAction = document.getElementById("hero-action-container");
       const logo = document.getElementById("logo-redirect");
 
-      logo.onclick = () => { window.location.href = "Index.html"; };
+      logo.onclick = () => { window.location.href = "index.html"; };
 
       if (user) {
         navLinks.innerHTML = `
-          <button onclick="window.location.href='Index.html'" class="active-nav">Home</button>
+          <button onclick="window.location.href='index.html'" class="active-nav">Home</button>
           <button onclick="window.location.href='Thoughts.html'">Thoughts</button>
           <button onclick="window.location.href='Dittos.html'">Dittos</button>
           <button onclick="window.location.href='Profiles.html'">Profile</button>
@@ -259,7 +259,7 @@
         `;
       } else {
         navLinks.innerHTML = `
-          <button onclick="window.location.href='Index.html'" class="active-nav">Home</button>
+          <button onclick="window.location.href='index.html'" class="active-nav">Home</button>
           <button onclick="window.location.href='Login.html'">Sign In</button>
         `;
         heroAction.innerHTML = `
