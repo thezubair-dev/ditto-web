@@ -176,6 +176,40 @@
       color: white; font-size: 15px; outline: none; transition: border-color 0.3s;
     }
     input:focus, textarea:focus { border-color: #06b6d4; }
+
+    /* Responsive Media Queries for Mobile, Laptops, and Tablets */
+    @media (max-width: 768px) {
+      nav {
+        height: auto;
+        flex-direction: column;
+        padding: 15px 5%;
+        gap: 15px;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .nav-links button {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+
+      section {
+        padding: 30px 5%;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -253,7 +287,7 @@
         card.innerHTML = `
           <h2>Profile Configuration Incomplete</h2>
           <p>Your matching matrix array parameters are entirely empty.</p>
-          <button class="btn" onclick="window.location.href='login.html'">Run 10-Question Core Profiler Now</button>`;
+          <button class="btn" onclick="window.location.href='quiz.html'">Run 10-Question Core Profiler Now</button>`;
       } else {
         card.innerHTML = `
           <div style="display:flex; align-items:center; gap:20px;">
