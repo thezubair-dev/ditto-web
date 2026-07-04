@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ditto | Meet Minds</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    body {
+      background: #050510;
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Moving background */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: 
+        radial-gradient(circle at 20% 20%, #8b5cf6, transparent 25%),
+        radial-gradient(circle at 80% 30%, #06b6d4, transparent 25%),
+        radial-gradient(circle at 50% 90%, #10b981, transparent 25%);
+      filter: blur(80px);
+      animation: bgMove 8s infinite alternate ease-in-out;
+    }
+
+    @keyframes bgMove {
+      100% { transform: scale(1.15); }
+    }
+
+    /* Cursor glow */
+    .light {
+      position: fixed;
+      width: 250px;
+      height: 250px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      will-change: transform;
+    }
+
+    /* Navbar */
+    nav {
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 8%;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 900;
+      background: linear-gradient(90deg, #a855f7, #06b6d4, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-links button {
+      padding: 10px 22px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Hover effect for ALL buttons */
+    .nav-links button:hover {
+      background: #10b981;
+      border-color: transparent;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+      transform: translateY(-5px);
+    }
+
+    /* Current page indicator style (when not hovered) */
+    .nav-links button.active-nav {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #06b6d4;
+    }
+
+    /* Sections / Routing */
+    section {
+      display: none;
+      padding: 60px 8%;
+      min-height: calc(100vh - 80px);
+    }
+
+    section.active {
+      display: grid;
+      animation: fadeIn 0.5s forwards ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Layout Variations */
+    .hero {
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .centered-layout {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      width: 100%;
+      margin-top: 30px;
+    }
+
+    /* Typography */
+    h1 { font-size: 45px; margin-bottom: 20px; }
+    .hero h1 { font-size: 65px; line-height: 1.1; }
+    .hero h1 span { color: #06b6d4; }
+    p { color: #ccc; font-size: 18px; margin: 20px 0; line-height: 1.6; }
+    h2 { font-size: 24px; }
+    h3 { font-size: 18px; color: #e2e8f0; }
+
+    /* UI Components */
+    .btn {
+      display: inline-block;
+      padding: 15px 35px;
+      border-radius: 40px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      text-align: center;
+    }
+
+    .hero .btn {
+      width: auto;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 35px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(139, 92, 246, 0.3);
+      box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+    }
+
+    /* Custom Floating Keyframe & Classes */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .floating-premium-card {
+      animation: float 4s infinite ease-in-out;
+    }
+
+    .floating-premium-card:hover {
+      animation-play-state: paused;
+    }
+
+    .avatar { font-size: 64px; margin-bottom: 15px; }
+    .avatar-small { font-size: 40px; margin-bottom: 10px; }
+    
+    .tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 14px;
+      margin: 5px 5px 5px 0;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    /* Forms & Inputs */
+    input, textarea {
+      width: 100%;
+      padding: 16px;
+      border-radius: 14px;
+      margin: 12px 0;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: white;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #06b6d4;
+    }
+
+    #posts {
+      width: 100%;
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* Profile UI Elements */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    .profile-info h2 { font-size: 32px; }
+    .profile-info p { margin: 5px 0; font-size: 16px; color: #a0aec0; }
+
+    /* Auth Utilities */
+    .auth-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .auth-link {
+      color: #06b6d4;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .auth-link:hover {
+      color: #a855f7;
+      text-decoration: underline;
+    }
+    .auth-view {
+      display: none;
+    }
+    .auth-view.active {
+      display: block;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .hero h1 { font-size: 44px; }
+      nav { padding: 0 4%; }
+      .profile-header { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg" aria-hidden="true"></div>
+  <div class="light" id="cursor-glow" aria-hidden="true"></div>
+
+  <nav>
+    <div class="logo">Ditto.</div>
+    <div class="nav-links">
+      <button onclick="showSection('home')" id="nav-home" class="active-nav">Home</button>
+      <button onclick="showSection('feed')" id="nav-feed">Thoughts</button>
+      <button onclick="showSection('dittos')" id="nav-dittos">Dittos</button>
+      <button onclick="showSection('profile')" id="nav-profile">Profile</button>
+    </div>
+  </nav>
+
+  <section id="home" class="active hero">
+    <div>
+      <h1>Find people who <br><span>think like you.</span></h1>
+      <p>Connect with your Ditto.</p>
+      <button class="btn" onclick="showSection('signup'); toggleAuthMode('signup');">Find My Ditto ✨</button>
+    </div>
+    <div class="card floating-premium-card">
+      <div class="avatar" aria-hidden="true">🧠</div>
+      <h2>The Thinker</h2>
+      <p>"I question, learn, and grow."</p>
+      <div style="margin-bottom: 15px;">
+        <span class="tag">#Philosophy</span>
+        <span class="tag">#Psychology</span>
+      </div>
+      <h2>94% Match</h2>
+    </div>
+  </section>
+
+  <section id="signup">
+    <div class="centered-layout">
+      <div class="card">
+        
+        <div id="view-signup" class="auth-view active">
+          <h1>Sign Up</h1>
+          <p style="font-size: 14px; margin: 5px 0 15px 0;">Create a new mind account to step in.</p>
+          
+          <label style="display:none;" for="username">Username</label>
+          <input id="username" type="text" placeholder="Username" autocomplete="off">
+
+          <label style="display:none;" for="email">Email</label>
+          <input id="email" type="email" placeholder="Email" autocomplete="off">
+          
+          <label style="display:none;" for="password">Password</label>
+          <input id="password" type="password" placeholder="Password">
+
+          <button class="btn" style="margin-top: 15px;" onclick="handleAuthSubmit('signup')">Find My Ditto</button>
+          
+          <div class="auth-footer">
+            <span>Already have an account?</span>
+            <span class="auth-link" onclick="toggleAuthMode('login')">Login here</span>
+          </div>
+        </div>
+
+        <div id="view-login" class="auth-view">
+          <h1>Login to Ditto</h1>
+          <p style="font-size: 14px; margin: 5px 0 15px 0;">Sync back into your consciousness.</p>
+          
+          <label style="display:none;" for="login-email">Email</label>
+          <input id="login-email" type="email" placeholder="Email" autocomplete="off">
+          
+          <label style="display:none;" for="login-password">Password</label>
+          <input id="login-password" type="password" placeholder="Password">
+
+          <button class="btn" style="margin-top: 15px;" onclick="handleAuthSubmit('login')">Find My Ditto</button>
+          
+          <div class="auth-footer">
+            <span class="auth-link" onclick="toggleAuthMode('forgot')">Forgot Password?</span>
+            <span class="auth-link" onclick="toggleAuthMode('signup')">New Account</span>
+          </div>
+        </div>
+
+        <div id="view-forgot" class="auth-view">
+          <h1>Recover Mind</h1>
+          <p style="font-size: 14px; margin: 5px 0 15px 0;">Enter your account email to receive a reset key.</p>
+          
+          <label style="display:none;" for="forgot-email">Email</label>
+          <input id="forgot-email" type="email" placeholder="Email" autocomplete="off">
+
+          <button class="btn" style="margin-top: 15px;" onclick="handleAuthSubmit('forgot')">Recover Credentials</button>
+          
+          <div class="auth-footer" style="justify-content: center;">
+            <span class="auth-link" onclick="toggleAuthMode('login')">Back to Login</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="feed">
+    <div class="centered-layout" style="max-width: 800px;">
+      <h1 style="align-self: flex-start;">Thought Universe 💭</h1>
+      <label style="display:none;" for="thought">Drop your thought</label>
+      <textarea id="thought" placeholder="Drop your thought..." rows="3"></textarea>
+      <button onclick="postThought()" class="btn" style="align-self: flex-start; width: auto;">Post Thought</button>
+
+      <div id="posts">
+        <div class="card">
+          <p>"Great conversations create better humans."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="dittos">
+    <div style="width: 100%;">
+      <h1>Your Dittos 👥</h1>
+      <p style="margin-bottom: 10px;">Minds you've synced up and connected with.</p>
+      
+      <div class="grid-layout">
+        <div class="card" style="text-align: center;">
+          <div class="avatar-small">🎨</div>
+          <h3>The Artist</h3>
+          <p style="font-size:14px; margin: 10px 0;">"Creating order out of chaos."</p>
+          <div>
+            <span class="tag">#Design</span>
+            <span class="tag">#Music</span>
+          </div>
+          <button class="btn btn-secondary" style="margin-top: 15px; padding: 10px 20px; font-size: 14px; width: auto;">Chat Mind</button>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div class="avatar-small">🚀</div>
+          <h3>The Builder</h3>
+          <p style="font-size:14px; margin: 10px 0;">"Let's assemble a new world."</p>
+          <div>
+            <span class="tag">#Coding</span>
+            <span class="tag">#Science</span>
+          </div>
+          <button class="btn btn-secondary" style="margin-top: 15px; padding: 10px 20px; font-size: 14px; width: auto;">Chat Mind</button>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div class="avatar-small">🌙</div>
+          <h3>The Dreamer</h3>
+          <p style="font-size:14px; margin: 10px 0;">"Staring at the universe."</p>
+          <div>
+            <span class="tag">#Books</span>
+            <span class="tag">#Philosophy</span>
+          </div>
+          <button class="btn btn-secondary" style="margin-top: 15px; padding: 10px 20px; font-size: 14px; width: auto;">Chat Mind</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="profile">
+    <div class="centered-layout" style="max-width: 800px;">
+      <div class="card">
+        <div class="profile-header">
+          <div class="avatar" style="margin-bottom: 0;">🧠</div>
+          <div class="profile-info">
+            <h2>Your Mind Space</h2>
+            <p>Synced with 3 unique consciousnesses</p>
+          </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;">
+
+        <h3 style="margin-bottom: 10px;">Your Bio / Core Logic</h3>
+        <textarea placeholder="Write down how your mind operates..." rows="3">Curious explorer exploring clean interfaces, functional code, and abstract thought paradigms.</textarea>
+
+        <h3 style="margin-top: 20px; margin-bottom: 10px;">Active Anchors</h3>
+        <div style="margin-bottom: 25px;">
+          <span class="tag" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4;">#Coding</span>
+          <span class="tag" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4;">#Philosophy</span>
+          <span class="tag" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4;">#Science</span>
+        </div>
+
+        <button class="btn" style="width: auto;">Update Mind Configuration</button>
+      </div>
+    </div>
+  </section>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js";
+    import { 
+      getAuth, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      sendPasswordResetEmail 
+    } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+    // Your Web App Firebase Configuration Configuration Keys
+    const firebaseConfig = {
+      apiKey: "AIzaSyCRU2XnvDbSMKlOqAMijcUGYPC4RKg9nPM",
+      authDomain: "dittoweb.firebaseapp.com",
+      projectId: "dittoweb",
+      storageBucket: "dittoweb.firebasestorage.app",
+      messagingSenderId: "902164300349",
+      appId: "1:902164300349:web:307e58ba6e3e9dbc33a054",
+      measurementId: "G-JP34BSJ3RB"
+    };
+
+    // Initialize Firebase Engine & Features
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+
+    // Make functions globally available for browser runtime event listeners
+    window.showSection = function(id) {
+      document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+      const targetSection = document.getElementById(id);
+      if(targetSection) targetSection.classList.add("active");
+
+      document.querySelectorAll(".nav-links button").forEach(b => b.classList.remove("active-nav"));
+      const targetNav = document.getElementById(`nav-${id}`);
+      if(targetNav) targetNav.classList.add("active-nav");
+    };
+
+    window.toggleAuthMode = function(mode) {
+      document.querySelectorAll('.auth-view').forEach(view => view.classList.remove('active'));
+      const activeView = document.getElementById(`view-${mode}`);
+      if (activeView) activeView.classList.add('active');
+    };
+
+    window.handleAuthSubmit = async function(type) {
+      if (type === 'signup') {
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        if(!username || !email || !password) { alert('Fill in all fields to complete your setup.'); return; }
+
+        try {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          alert(`Welcome to the Dittoverse, ${username}!`);
+          window.showSection('feed');
+        } catch (error) {
+          alert(`Sign Up Error: ${error.message}`);
+        }
+      } 
+      else if (type === 'login') {
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+
+        if(!email || !password) { alert('Please supply credentials.'); return; }
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          alert('Consciousness Synchronized!');
+          window.showSection('feed');
+        } catch (error) {
+          alert(`Login Failed: ${error.message}`);
+        }
+      } 
+      else if (type === 'forgot') {
+        const email = document.getElementById('forgot-email').value.trim();
+        if(!email) { alert('Provide your account email address.'); return; }
+
+        try {
+          await sendPasswordResetEmail(auth, email);
+          alert('A credential recovery reset link has been forwarded to your email inbox.');
+          window.toggleAuthMode('login');
+        } catch (error) {
+          alert(`Recovery Failed: ${error.message}`);
+        }
+      }
+    };
+
+    window.postThought = function() {
+      const input = document.getElementById("thought");
+      const thoughtText = input.value.trim();
+      if (thoughtText === "") return;
+
+      const postsContainer = document.getElementById("posts");
+      const card = document.createElement("div");
+      card.className = "card";
+      
+      const p = document.createElement("p");
+      p.textContent = `"${thoughtText}"`; 
+      
+      card.appendChild(p);
+      postsContainer.insertBefore(card, postsContainer.firstChild); 
+      input.value = "";
+    };
+
+    // Tracking UI Glow Effect Mouse Coordinates
+    const glow = document.getElementById("cursor-glow");
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX - 125; 
+      mouseY = e.clientY - 125;
+      requestAnimationFrame(() => {
+        glow.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+      });
+    });
+  </script>
+</body>
+</html>
