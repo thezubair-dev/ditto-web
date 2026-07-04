@@ -176,7 +176,7 @@
       background: rgba(255, 255, 255, 0.04); border-radius: 20px;
       padding: 24px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.06);
     }
-    .thought-author { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .thought-author { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; cursor: pointer; }
     .author-img { width: 35px; height: 35px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
     .author-meta h4 { font-size: 14px; color: #f1f5f9; }
     .author-meta span { font-size: 11px; color: #888; }
@@ -247,12 +247,6 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-
-onAuthStateChanged(auth, (user) => {
-    if (!user) {
-        window.location.href = "login.htm";
-    }
-});
     
     let localDB = {
       users: {
@@ -290,18 +284,24 @@ onAuthStateChanged(auth, (user) => {
       return Math.min(1.0, Math.max(0.0, (0.7 * traitScore) + (0.3 * stateScore)));
     }
 
+    // Consolidated Authentication Listening Engine
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        sessionUser = user;
-        const localSaved = localStorage.getItem(`userVector_${user.uid}`);
-        if (!localDB.users[user.uid]) {
-          localDB.users[user.uid] = { uid: user.uid, name: user.email.split('@')[0], avatar: "👤", traitVector: null, moodVector: null, bio: "System Node User", likesCount: 0 };
-        }
-        if (localSaved) {
-          const parsing = JSON.parse(localSaved);
-          localDB.users[user.uid].traitVector = parsing.trait;
-          localDB.users[user.uid].moodVector = parsing.mood;
-        }
+      if (!user) {
+        alert("Please login first.");
+        window.location.href = "login.html";
+        return;
+      }
+      
+      sessionUser = user;
+      const localSaved = localStorage.getItem(`userVector_${user.uid}`);
+      
+      if (!localDB.users[user.uid]) {
+        localDB.users[user.uid] = { uid: user.uid, name: user.email.split('@')[0], avatar: "👤", traitVector: null, moodVector: null, bio: "System Node User", likesCount: 0 };
+      }
+      if (localSaved) {
+        const parsing = JSON.parse(localSaved);
+        localDB.users[user.uid].traitVector = parsing.trait;
+        localDB.users[user.uid].moodVector = parsing.mood;
       }
       renderFeed('new');
     });
@@ -355,7 +355,7 @@ onAuthStateChanged(auth, (user) => {
       if(sessionUser.uid === targetId) { out.innerHTML = "<p>Your reflection matching is 100% stable.</p>"; return; }
       
       const me = localDB.users[sessionUser.uid]; const target = localDB.users[targetId];
-      if(!me.traitVector) { out.innerHTML = "<p>Complete your profile 10 questions to test matching dynamics.</p>"; return; }
+      if(!me || !me.traitVector) { out.innerHTML = "<p>Complete your profile 10 questions to test matching dynamics.</p>"; return; }
 
       const pct = (runVectorMatchingMetrics(me, target) * 100).toFixed(1);
       out.innerHTML = `
