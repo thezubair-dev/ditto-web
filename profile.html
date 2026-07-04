@@ -68,12 +68,12 @@
   <div class="light" id="cursor-glow" aria-hidden="true"></div>
 
   <nav>
-    <div class="logo" onclick="window.location.href='Index.html'">Ditto.</div>
+    <div class="logo" onclick="window.location.href='index.html'">Ditto.</div>
     <div class="nav-links">
-      <button onclick="window.location.href='Index.html'">Home</button>
-      <button onclick="window.location.href='Thoughts.html'">Thoughts</button>
-      <button onclick="window.location.href='Dittos.html'">Dittos</button>
-      <button onclick="window.location.href='Profiles.html'" class="active-nav">Profile</button>
+      <button onclick="window.location.href='index.html'">Home</button>
+      <button onclick="window.location.href='thoughts.html'">Thoughts</button>
+      <button onclick="window.location.href='dittos.html'">Dittos</button>
+      <button onclick="window.location.href='profiles.html'" class="active-nav">Profile</button>
     </div>
   </nav>
 
@@ -124,7 +124,7 @@
     ];
 
     onAuthStateChanged(auth, (user) => {
-      if (!user) { window.location.href = 'Login.html'; return; }
+      if (!user) { window.location.href = 'login.html'; return; }
       sessionUser = user;
       evalStateAndRender();
     });
@@ -346,7 +346,7 @@
     window.logoutSession = async function() {
       if (confirm('Terminate encryption pipeline session context?')) {
         await signOut(auth);
-        window.location.href = "Index.html";
+        window.location.href = "index.html";
       }
     };
 
