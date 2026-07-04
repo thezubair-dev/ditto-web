@@ -196,7 +196,7 @@
     <div class="logo" id="logo-redirect">Ditto.</div>
     <div class="nav-links" id="dynamic-nav-links">
       <button onclick="window.location.href='index.html'" class="active-nav">Home</button>
-      <button onclick="window.location.href='Login.html'">Sign In</button>
+      <button onclick="window.location.href='login.html'">Sign In</button>
     </div>
   </nav>
 
@@ -205,7 +205,7 @@
     <p>Connect with like-minded people. Where minds meet before appearances.</p>
 
     <div id="hero-action-container" style="width: 100%; display: flex; justify-content: center; margin-bottom: 50px;">
-      <a href="Login.html" class="btn">Find my Ditto ✨</a>
+      <a href="login.html" class="btn">Find my Ditto ✨</a>
     </div>
 
     <div class="preview-container">
@@ -250,20 +250,20 @@
       if (user) {
         navLinks.innerHTML = `
           <button onclick="window.location.href='index.html'" class="active-nav">Home</button>
-          <button onclick="window.location.href='Thoughts.html'">Thoughts</button>
-          <button onclick="window.location.href='Dittos.html'">Dittos</button>
-          <button onclick="window.location.href='Profiles.html'">Profile</button>
+          <button onclick="window.location.href='thoughts.html'">Thoughts</button>
+          <button onclick="window.location.href='dittos.html'">Dittos</button>
+          <button onclick="window.location.href='profiles.html'">Profile</button>
         `;
         heroAction.innerHTML = `
-          <a href="Profiles.html" class="btn">Find my Ditto ✨</a>
+          <a href="profiles.html" class="btn">Find my Ditto ✨</a>
         `;
       } else {
         navLinks.innerHTML = `
           <button onclick="window.location.href='index.html'" class="active-nav">Home</button>
-          <button onclick="window.location.href='Login.html'">Sign In</button>
+          <button onclick="window.location.href='login.html'">Sign In</button>
         `;
         heroAction.innerHTML = `
-          <a href="Login.html" class="btn">Find my Ditto ✨</a>
+          <a href="login.html" class="btn">Find my Ditto ✨</a>
         `;
       }
     });
