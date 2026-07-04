@@ -332,7 +332,7 @@
 
     window.saveProfileOverride = function() {
       const newName = document.getElementById('edit-display-name').value.trim();
-      const newBio = document.getElementById('edit-edit-bio' ? document.getElementById('edit-bio').value.trim() : document.getElementById('edit-bio').value.trim());
+      const newBio = document.getElementById('edit-bio').value.trim(); document.getElementById('edit-bio').value.trim() : document.getElementById('edit-bio').value.trim());
       if (!newName) { alert('Name field required.'); return; }
       
       localStorage.setItem(`userName_${sessionUser.uid}`, newName);
