@@ -220,13 +220,11 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // --- PASTE THIS EXACTLY HERE FOR PROTECTED PAGES ---
-onAuthStateChanged(auth, (user) => {
-    if (!user) {
-        window.location.href = "login.htm";
+    onAuthStateChanged(auth, (user) => {
+    if (user) {
+        window.location.href = "profile.html";
     }
 });
-// ---------------------------------------------------
     
     onAuthStateChanged(auth, (user) => {
       if (user) {
