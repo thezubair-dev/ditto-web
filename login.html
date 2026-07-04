@@ -62,9 +62,9 @@
   <div class="light" id="cursor-glow" aria-hidden="true"></div>
 
   <nav>
-    <div class="logo" onclick="window.location.href='Index.html'">Ditto.</div>
+    <div class="logo" onclick="window.location.href='index.html'">Ditto.</div>
     <div class="nav-links">
-      <button onclick="window.location.href='Index.html'">Home</button>
+      <button onclick="window.location.href='index.html'">Home</button>
     </div>
   </nav>
 
@@ -72,13 +72,13 @@
     <div class="card">
       <div id="view-login" class="auth-view active">
         <h1>Welcome Back</h1>
-        <p>Synchronize into your consciousness matrix.</p>
+        <p>Connect with your Ditto.</p>
         <input id="login-email" type="email" placeholder="Email Address">
         <input id="login-password" type="password" placeholder="Password">
         <button class="btn" onclick="handleAuthSubmit('login')">Authorize Access</button>
         <div class="auth-footer">
           <span class="auth-link" onclick="toggleAuthMode('forgot')">Forgot Password?</span>
-          <span>New? <span class="auth-link" onclick="toggleAuthMode('signup')">Create Mind Profile</span></span>
+          <span>New? <span class="auth-link" onclick="toggleAuthMode('signup')">Find My Ditto</span></span>
         </div>
       </div>
 
@@ -152,7 +152,7 @@
       }
     };
 
-    onAuthStateChanged(auth, (user) => { if (user) window.location.href = "Profiles.html"; });
+    onAuthStateChanged(auth, (user) => { if (user) window.location.href = "profiles.html"; });
 
     const glow = document.getElementById("cursor-glow");
     let cX = 0, cY = 0;
