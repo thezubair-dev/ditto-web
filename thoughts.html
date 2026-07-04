@@ -248,6 +248,12 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        window.location.href = "login.htm";
+    }
+});
+    
     let localDB = {
       users: {
         "node_artist": { uid: "node_artist", name: "Elena R.", avatar: "🎨", traitVector: [0.5, 0, 1.0, 0, 0, 0, 1.0, 0, 0.33, 1.0, 0.5, 0.3, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0.33, 0, 0, 1, 0], moodVector: [1,0,0,0,1,0,0,0], moodTime: Date.now(), bio: "Processing reality through textures.", likesCount: 45, matched: true },
