@@ -3,238 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ditto | Profile Node</title>
+  <title>Ditto | Mind Core</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-    }
-
-    body {
-      background: #050510;
-      color: white;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
+    body { background: #050510; color: white; min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; }
+    
     .bg {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      background: 
-        radial-gradient(circle at 20% 20%, #8b5cf6, transparent 25%),
-        radial-gradient(circle at 80% 30%, #06b6d4, transparent 25%),
-        radial-gradient(circle at 50% 90%, #10b981, transparent 25%);
-      filter: blur(80px);
-      animation: bgMove 8s infinite alternate ease-in-out;
+      position: fixed; inset: 0; z-index: -2;
+      background: radial-gradient(circle at 20% 20%, #8b5cf6, transparent 25%), radial-gradient(circle at 80% 30%, #06b6d4, transparent 25%), radial-gradient(circle at 50% 90%, #10b981, transparent 25%);
+      filter: blur(80px); animation: bgMove 8s infinite alternate ease-in-out;
     }
-
-    @keyframes bgMove {
-      100% { transform: scale(1.1); }
-    }
-
-    .light {
-      position: fixed;
-      width: 250px;
-      height: 250px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: -1;
-      top: 0;
-      left: 0;
-      will-change: transform;
-    }
+    @keyframes bgMove { 100% { transform: scale(1.1); } }
+    .light { position: fixed; width: 250px; height: 250px; background: rgba(255, 255, 255, 0.08); border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: -1; }
 
     nav {
-      height: 80px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 8%;
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      height: 80px; display: flex; justify-content: space-between; align-items: center; padding: 0 8%;
+      background: rgba(5, 5, 16, 0.5); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
+    .logo { font-size: 32px; font-weight: 900; background: linear-gradient(90deg, #a855f7, #06b6d4, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+    .nav-links { display: flex; gap: 10px; }
+    .nav-links button { padding: 10px 22px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.03); color: white; cursor: pointer; transition: all 0.3s; font-size: 14px; }
+    .nav-links button:hover, .active-nav { background: #10b981; border-color: transparent; box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+    .active-nav { background: rgba(255, 255, 255, 0.12) !important; border-color: #06b6d4 !important; }
 
-    .logo {
-      font-size: 32px;
-      font-weight: 900;
-      background: linear-gradient(90deg, #a855f7, #06b6d4, #10b981);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      color: transparent;
-      cursor: pointer;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 10px;
-    }
-
-    .nav-links button {
-      padding: 10px 22px;
-      border-radius: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.03);
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .nav-links button:hover {
-      background: #10b981;
-      border-color: transparent;
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
-      transform: translateY(-3px);
-    }
-
-    .nav-links button.active-nav {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: #06b6d4;
-    }
-
-    section {
-      display: grid;
-      padding: 40px 8%;
-      min-height: calc(100vh - 80px);
-    }
-
-    .centered-layout {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 700px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    h1 { font-size: 36px; margin-bottom: 15px; letter-spacing: -0.5px; }
-    p { color: #b3b3b3; font-size: 16px; margin: 10px 0; line-height: 1.6; }
-    h2 { font-size: 24px; margin-bottom: 12px; }
-    h3 { font-size: 18px; color: #f1f5f9; margin-bottom: 10px; }
-
-    .btn {
-      display: inline-block;
-      padding: 14px 30px;
-      border-radius: 40px;
-      border: none;
-      font-size: 16px;
-      font-weight: 600;
-      background: linear-gradient(90deg, #8b5cf6, #06b6d4);
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 20px rgba(255, 255, 255, 0.05);
-    }
-
+    section { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
     .card {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 35px;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      width: 100%;
-      animation: fadeIn 0.4s forwards ease-out;
+      background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      max-width: 680px; width: 100%; animation: fadeIn 0.4s ease-out;
     }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .stat-bar { display: flex; gap: 15px; margin: 20px 0; width: 100%; justify-content: space-between; }
+    .stat-box { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); padding: 15px; border-radius: 16px; text-align: center; }
+    .stat-num { font-size: 24px; font-weight: 800; color: #06b6d4; }
+    .stat-lbl { font-size: 11px; color: #94a3b8; text-transform: uppercase; margin-top: 4px; }
 
-    .avatar-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .avatar-selectable {
-      font-size: 40px; padding: 12px; border-radius: 16px;
-      background: rgba(255,255,255,0.03); border: 2px solid transparent;
-      cursor: pointer; transition: all 0.2s; text-align: center;
-    }
+    .avatar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 20px 0; }
+    .avatar-selectable { font-size: 32px; padding: 12px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 2px solid transparent; cursor: pointer; text-align: center; transition: all 0.2s; }
     .avatar-selectable:hover { background: rgba(255,255,255,0.08); transform: scale(1.05); }
     .avatar-selectable.selected { border-color: #06b6d4; background: rgba(6, 182, 212, 0.1); }
 
-    input, textarea {
-      width: 100%; padding: 14px; border-radius: 12px; margin: 10px 0;
-      background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12);
-      color: white; font-size: 15px; outline: none; transition: border-color 0.3s;
-    }
+    input, textarea { width: 100%; padding: 14px; border-radius: 12px; margin: 10px 0; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 15px; outline: none; }
     input:focus, textarea:focus { border-color: #06b6d4; }
 
-    label { display: block; font-size: 14px; color: #a3a3a3; margin-top: 10px; }
-
-    /* Quiz Elements */
-    .quiz-container { width: 100%; margin-top: 15px; }
     .quiz-item { display: none; }
     .quiz-item.active { display: block; }
-    .options-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
-    
-    .option-btn {
-      width: 100%; padding: 15px 20px; border-radius: 14px; text-align: left;
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-      color: white; font-size: 15px; cursor: pointer; transition: all 0.2s;
-    }
-    .option-btn:hover { background: rgba(255,255,255,0.08); border-color: #8b5cf6; padding-left: 25px; }
+    .options-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+    .option-btn { width: 100%; padding: 16px; border-radius: 14px; text-align: left; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: white; font-size: 15px; cursor: pointer; transition: all 0.2s; }
+    .option-btn:hover { background: rgba(255,255,255,0.08); border-color: #8b5cf6; padding-left: 24px; }
     .option-btn.selected { background: rgba(139, 92, 246, 0.2); border-color: #8b5cf6; }
-    
-    .progress-bar-container { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #8b5cf6, #06b6d4); transition: width 0.3s; }
 
-    /* Cross-Device Optimization Matrix */
-    @media (max-width: 768px) {
-      nav {
-        height: auto;
-        flex-direction: column;
-        padding: 15px 4%;
-        gap: 15px;
-      }
-      .nav-links {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      .nav-links button {
-        padding: 8px 16px;
-        font-size: 14px;
-        flex: 1 1 auto;
-        text-align: center;
-      }
-      section { padding: 20px 4%; }
-      h1 { font-size: 28px; }
-      h2 { font-size: 20px; }
-      .card { padding: 20px; border-radius: 20px; }
-      .avatar-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
-      .avatar-selectable { font-size: 30px; padding: 8px; }
-      .option-btn { padding: 12px 16px; font-size: 14px; }
-    }
+    .progress-container { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 25px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #8b5cf6, #06b6d4); transition: width 0.3s; }
+    .btn { display: inline-block; width: 100%; padding: 15px; border-radius: 40px; border: none; font-size: 16px; font-weight: 600; background: linear-gradient(90deg, #8b5cf6, #06b6d4); color: white; cursor: pointer; transition: all 0.3s; text-align: center; text-decoration: none; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4); }
+    .btn-secondary { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -243,20 +68,18 @@
   <div class="light" id="cursor-glow" aria-hidden="true"></div>
 
   <nav>
-    <div class="logo" onclick="window.location.href='index.html'">Ditto.</div>
+    <div class="logo" onclick="window.location.href='Index.html'">Ditto.</div>
     <div class="nav-links">
-      <button onclick="window.location.href='index.html'" id="nav-home">Home</button>
-      <button onclick="window.location.href='thoughts.html'" id="nav-feed">Thoughts</button>
-      <button onclick="window.location.href='dittos.html'" id="nav-dittos">Dittos</button>
-      <button onclick="window.location.href='profile.html'" id="nav-profile" class="active-nav">Profile</button>
+      <button onclick="window.location.href='Index.html'">Home</button>
+      <button onclick="window.location.href='Thoughts.html'">Thoughts</button>
+      <button onclick="window.location.href='Dittos.html'">Dittos</button>
+      <button onclick="window.location.href='Profiles.html'" class="active-nav">Profile</button>
     </div>
   </nav>
 
   <section>
-    <div class="centered-layout">
-      <div class="card" id="profile-container-root">
-        <h2 style="text-align: center; color: #a3a3a3;">Validating Consciousness Connection Link...</h2>
-      </div>
+    <div class="card" id="profile-root">
+      <h3 style="text-align: center; color: #94a3b8;">Syncing Neural Framework Instance...</h3>
     </div>
   </section>
 
@@ -270,250 +93,265 @@
       projectId: "dittoweb",
       storageBucket: "dittoweb.firebasestorage.app",
       messagingSenderId: "902164300349",
-      appId: "1:902164300349:web:307e58ba6e3e9dbc33a054",
-      measurementId: "G-JP34BSJ3RB"
+      appId: "1:902164300349:web:307e58ba6e3e9dbc33a054"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    
-    let localDB = { users: {} };
     let sessionUser = null;
-    let selectedAvatarOnboarding = "";
-    let onboardingAnswers = {};
+    let chosenAvatar = "";
+    let quizStore = {};
 
-    const QUESTION_DATA = [
-      { q: "When you've had a long or tiring day, what helps you feel better?", type: "scale", opts: ["Talking to people about it", "Being alone in silence", "A bit of both, depends on the day", "Doing something active alone, like walking or listening to music"], vals: [1.0, 0.0, 0.5, 0.3] },
-      { q: "When you are feeling low or upset, what do you usually do first?", type: "one-hot", slots: 4, opts: ["Talk to someone about what I'm feeling", "Distract myself with something else, like scrolling or watching something", "Sit alone with the feeling and think it through", "Keep myself busy so I don't have to think about it"] },
-      { q: "How often do small problems or setbacks ruin your mood for the whole day?", type: "scale", opts: ["Almost every time", "Quite often", "Rarely", "Almost never"], vals: [1.0, 0.66, 0.33, 0.0] },
-      { q: "What kind of conversation do you enjoy the most?", type: "scale", opts: ["Deep talks about life, meaning, or big ideas", "Practical talks about plans, goals, or real problems", "Light and fun talks, jokes, random topics", "It depends completely on my mood that day"], vals: [1.0, 0.5, 0.3, 0.5] },
-      { q: "When a friend shares a problem with you, what do you naturally do?", type: "one-hot", slots: 4, opts: ["Just listen and make them feel understood", "Try to give advice or solutions", "Share a similar experience I've been through", "Ask more questions to understand them better"] },
-      { q: "When you share something personal, what do you want from the other person?", type: "one-hot", slots: 4, opts: ["For them to say 'I understand' or 'me too'", "For them to question or challenge my thinking", "Nothing really, I just want to express it", "For them to ask more about how I feel"] },
-      { q: "How often do you feel like no one really understands you?", type: "scale", opts: ["Very often", "Sometimes", "Rarely", "Almost never"], vals: [1.0, 0.66, 0.33, 0.0] },
-      { q: "Right now in your life, what matters to you the most?", type: "one-hot", slots: 5, opts: ["Feeling connected to people", "Growing and achieving things", "Having freedom and independence", "Feeling safe and secure", "Finding meaning or purpose in life"] },
-      { q: "When you disagree with someone, what do you usually do?", type: "one-hot", slots: 4, opts: ["Avoid the conflict and let it go", "Say what I think, even if it creates tension", "Try to find a middle ground", "Agree with them just to keep the peace"] },
-      { q: "Right now, how are you feeling?", type: "mood", slots: 8, opts: ["Excited", "Anxious", "Content", "Lonely", "Hopeful", "Numb", "Motivated", "Overwhelmed"] }
+    const PHILOSOPHICAL_AVATARS = [
+      { char: "👁️", label: "Observer" }, { char: "🌌", label: "Existentialist" },
+      { char: "🌀", label: "Stoic" }, { char: "⚡", label: "Catalyst" },
+      { char: "🪐", label: "Solitairian" }, { char: "🌿", label: "Naturalist" },
+      { char: "🕯️", label: "Scholar" }, { char: "🎭", label: "Idealist" },
+      { char: "🔮", label: "Mystic" }, { char: "🛠️", label: "Architect" }
     ];
 
-    // Core Gatekeeper Engine
+    const QUIZ_QUESTIONS = [
+      { q: "When you've had a long or tiring day, what helps you feel better?", type: "scale", opts: ["Talking to people about it", "Being alone in silence", "A bit of both, depends on the day", "Doing something active alone, like walking or listening to music"], vals: [1.0, 0.0, 0.5, 0.3] },
+      { q: "When you are feeling low or upset, what do you usually do first?", type: "onehot", slots: 4, opts: ["Talk to someone about what I'm feeling", "Distract myself with something else, like scrolling or watching something", "Sit alone with the feeling and think it through", "Keep myself busy so I don't have to think about it"] },
+      { q: "How often do small problems or setbacks ruin your mood for the whole day?", type: "scale", opts: ["Almost every time", "Quite often", "Rarely", "Almost never"], vals: [1.0, 0.66, 0.33, 0.0] },
+      { q: "What kind of conversation do you enjoy the most?", type: "scale", opts: ["Deep talks about life, meaning, or big ideas", "Practical talks about plans, goals, or real problems", "Light and fun talks, jokes, random topics", "It depends completely on my mood that day"], vals: [1.0, 0.5, 0.3, 0.5] },
+      { q: "When a friend shares a problem with you, what do you naturally do?", type: "onehot", slots: 4, opts: ["Just listen and make them feel understood", "Try to give advice or solutions", "Share a similar experience I've been through", "Ask more questions to understand them better"] },
+      { q: "When you share something personal, what do you want from the other person?", type: "onehot", slots: 4, opts: ["For them to say 'I understand' or 'me too'", "For them to question or challenge my thinking", "Nothing really, I just want to express it", "For them to ask more about how I feel"] },
+      { q: "How often do you feel like no one really understands you?", type: "scale", opts: ["Very often", "Sometimes", "Rarely", "Almost never"], vals: [1.0, 0.66, 0.33, 0.0] },
+      { q: "Right now in your life, what matters to you the most?", type: "onehot", slots: 5, opts: ["Feeling connected to people", "Growing and achieving things", "Having freedom and independence", "Feeling safe and secure", "Finding meaning or purpose in life"] },
+      { q: "When you disagree with someone, what do you usually do?", type: "onehot", slots: 4, opts: ["Avoid the conflict and let it go", "Say what I think, even if it creates tension", "Try to find a middle ground", "Agree with them just to keep the peace"] },
+      { q: "Right now, how are you feeling?", type: "mood", opts: ["Excited", "Anxious", "Content", "Lonely", "Hopeful", "Numb", "Motivated", "Overwhelmed"] }
+    ];
+
     onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        alert("Please login first.");
-        window.location.href = 'index.html'; // Fallback redirect to gateway entry point
-        return;
-      }
-      
+      if (!user) { window.location.href = 'Login.html'; return; }
       sessionUser = user;
-      const localSaved = localStorage.getItem(`userVector_${user.uid}`);
-      
-      if (!localDB.users[user.uid]) {
-        localDB.users[user.uid] = { uid: user.uid, name: user.email.split('@')[0], avatar: "👤", traitVector: null, moodVector: null, bio: "System Node User" };
-      }
-      
-      if (localSaved) {
-        const parsing = JSON.parse(localSaved);
-        localDB.users[user.uid].traitVector = parsing.trait;
-        localDB.users[user.uid].moodVector = parsing.mood;
-        if(localStorage.getItem(`userAvatar_${user.uid}`)) localDB.users[user.uid].avatar = localStorage.getItem(`userAvatar_${user.uid}`);
-        if(localStorage.getItem(`userName_${user.uid}`)) localDB.users[user.uid].name = localStorage.getItem(`userName_${user.uid}`);
-        executeProfileUIRender();
-      } else {
-        executeQuizEmbeddedRender();
-      }
+      evalStateAndRender();
     });
 
-    // Render Form Route A: Fully Calibrated Interface
-    function executeProfileUIRender() {
-      const root = document.getElementById('profile-container-root');
-      const u = localDB.users[sessionUser.uid];
-      root.innerHTML = `
-        <div style="display:flex; align-items:center; gap:20px;">
-          <div style="font-size:50px; text-shadow: 0 0 10px rgba(255,255,255,0.2);">${u.avatar}</div>
-          <div>
-            <h2>${u.name}</h2>
-            <p style="color:#10b981; margin:0; font-size:14px; font-weight:600;">✓ Cognitive Calibration Active</p>
-          </div>
-        </div>
-        <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:20px 0;">
-        
-        <label>Update Matrix Handle Identifier</label>
-        <input id="edit-display-name" type="text" value="${u.name}">
-        
-        <button class="btn" style="width:100%; margin-top:15px;" onclick="saveProfileOverride()">Save Updates</button>
-        <button class="btn btn-secondary" style="width:100%; margin-top:10px;" onclick="logoutSession()">Terminate Session Instance</button>
-      `;
+    function evalStateAndRender() {
+      const hasVector = localStorage.getItem(`userVector_${sessionUser.uid}`);
+      if (hasVector) { renderDashboard(); } else { renderOnboardingPrompt(); }
     }
 
-    // Render Form Route B: Direct Quiz Assembly Engine
-    function executeQuizEmbeddedRender() {
-      const root = document.getElementById('profile-container-root');
-      root.innerHTML = `
-        <div id="setup-meta-step">
-          <h1>Complete Profile Setup</h1>
-          <p>Before entering the networks, you must choose an avatar node asset and run the 10 core logic questions.</p>
-          
-          <h3 style="margin-top:20px;">Select Avatar Node Asset</h3>
-          <div class="avatar-grid">
-            <div class="avatar-selectable" onclick="selectAvatar(this, '🧠')">🧠</div>
-            <div class="avatar-selectable" onclick="selectAvatar(this, '🎨')">🎨</div>
-            <div class="avatar-selectable" onclick="selectAvatar(this, '🚀')">🚀</div>
-            <div class="avatar-selectable" onclick="selectAvatar(this, '🌙')">🌙</div>
-            <div class="avatar-selectable" onclick="selectAvatar(this, '🔍')">🔍</div>
-            <div class="avatar-selectable" onclick="selectAvatar(this, '⚡')">⚡</div>
-            <div class="avatar-selectable" onclick="selectAvatar(this, '🍀')">🍀</div>
-            <div class="avatar-selectable" onclick="selectAvatar(this, '🎭')">🎭</div>
-          </div>
-
-          <h3>Confirm Handle Name</h3>
-          <input id="profile-display-name" type="text" value="${localDB.users[sessionUser.uid].name}">
-          
-          <button class="btn" style="width:100%; margin-top:15px;" onclick="advanceToQuizWizard()">Unlock Cognitive Calibration Quiz</button>
-        </div>
-
-        <div id="setup-quiz-step" style="display:none;">
-          <div class="progress-bar-container">
-            <div class="progress-bar-fill" id="quiz-progress"></div>
-          </div>
-          <div id="quiz-window" class="quiz-container"></div>
+    function renderOnboardingPrompt() {
+      document.getElementById('profile-root').innerHTML = `
+        <div style="text-align:center; padding: 20px 0;">
+          <div style="font-size: 50px; margin-bottom: 15px;">🔒</div>
+          <h2 style="margin-bottom:10px;">Cognitive Matrix Locked</h2>
+          <p style="margin-bottom:25px; color:#94a3b8;">You must run through your 10 core personality mapping questions to open matching algorithms, unlock custom dashboards, and communicate with other nodes.</p>
+          <button class="btn" onclick="startQuizWizard()">Initialize Calibration Test</button>
         </div>
       `;
     }
 
-    window.selectAvatar = function(element, char) {
-      document.querySelectorAll('.avatar-selectable').forEach(el => el.classList.remove('selected'));
-      element.classList.add('selected');
-      selectedAvatarOnboarding = char;
-    };
-
-    window.advanceToQuizWizard = function() {
-      const dName = document.getElementById('profile-display-name').value.trim();
-      if(!selectedAvatarOnboarding) { alert('Select an avatar asset node.'); return; }
-      if(!dName) { alert('Provide a display name.'); return; }
+    window.startQuizWizard = function() {
+      let html = `
+        <div id="avatar-onboarding-block">
+          <h2 style="margin-bottom:5px;">Select Identity Symbol</h2>
+          <p style="color:#94a3b8; font-size:14px; margin-bottom:15px;">Pick one of the ten highly philosophical avatars representing your core stance.</p>
+          <div class="avatar-grid">`;
       
-      localDB.users[sessionUser.uid].name = dName;
-      localDB.users[sessionUser.uid].avatar = selectedAvatarOnboarding;
-      localStorage.setItem(`userAvatar_${sessionUser.uid}`, selectedAvatarOnboarding);
-      localStorage.setItem(`userName_${sessionUser.uid}`, dName);
+      PHILOSOPHICAL_AVATARS.forEach(a => {
+        html += `<div class="avatar-selectable" title="${a.label}" onclick="chooseOnboardingAvatar(this, '${a.char}')">${a.char}</div>`;
+      });
 
-      document.getElementById('setup-meta-step').style.display = 'none';
-      document.getElementById('setup-quiz-step').style.display = 'block';
-      buildQuizCoreDOM();
+      html += `</div>
+          <label style="font-size:13px; color:#94a3b8;">Confirm Network Username</label>
+          <input id="onboard-name" type="text" value="${localStorage.getItem(`userName_${sessionUser.uid}`) || sessionUser.email.split('@')[0]}">
+          <button class="btn" style="margin-top:15px;" onclick="confirmOnboardingMeta()">Next Phase: Personality Engine</button>
+        </div>
+        <div id="quiz-wizard-block" style="display:none;">
+          <div class="progress-container"><div class="progress-fill" id="q-fill"></div></div>
+          <div id="quiz-question-pool"></div>
+        </div>`;
+      
+      document.getElementById('profile-root').innerHTML = html;
     };
 
-    function buildQuizCoreDOM() {
-      const container = document.getElementById('quiz-window');
-      container.innerHTML = "";
-      onboardingAnswers = {};
+    window.chooseOnboardingAvatar = function(el, symbol) {
+      document.querySelectorAll('.avatar-selectable').forEach(box => box.classList.remove('selected'));
+      el.classList.add('selected');
+      chosenAvatar = symbol;
+    };
 
-      QUESTION_DATA.forEach((question, idx) => {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = `quiz-item ${idx === 0 ? 'active' : ''}`;
-        itemDiv.id = `quiz-item-${idx}`;
+    window.confirmOnboardingMeta = function() {
+      const nameVal = document.getElementById('onboard-name').value.trim();
+      if (!chosenAvatar) { alert('Please pick an identity symbol avatar.'); return; }
+      if (!nameVal) { alert('Username cannot be empty.'); return; }
+      
+      localStorage.setItem(`userName_${sessionUser.uid}`, nameVal);
+      localStorage.setItem(`userAvatar_${sessionUser.uid}`, chosenAvatar);
+      
+      document.getElementById('avatar-onboarding-block').style.display = 'none';
+      document.getElementById('quiz-wizard-block').style.display = 'block';
+      buildQuizDOM();
+    };
 
-        const qTitle = document.createElement('h2');
-        if (question.type === 'mood') {
-          qTitle.innerText = `Question ${idx + 1} of 10: ${question.q} (Select exactly 2 states)`;
-        } else {
-          qTitle.innerText = `Question ${idx + 1} of 10: ${question.q}`;
-        }
-        itemDiv.appendChild(qTitle);
+    function buildQuizDOM() {
+      const pool = document.getElementById('quiz-question-pool');
+      pool.innerHTML = ""; quizStore = {};
 
-        const optGrid = document.createElement('div');
-        optGrid.className = "options-grid";
+      QUIZ_QUESTIONS.forEach((q, idx) => {
+        const wrap = document.createElement('div');
+        wrap.className = `quiz-item ${idx === 0 ? 'active' : ''}`;
+        wrap.id = `q-item-${idx}`;
 
-        question.opts.forEach((optionText, oIdx) => {
-          const btn = document.createElement('button');
-          btn.className = "option-btn";
-          btn.innerText = optionText;
-          btn.onclick = () => handleQuizSelection(idx, oIdx, btn);
-          optGrid.appendChild(btn);
+        const head = document.createElement('h2');
+        head.innerText = `Question ${idx + 1} of 10: ${q.q}`;
+        if (q.type === 'mood') head.innerText += " (Select up to 2 moods)";
+        wrap.appendChild(head);
+
+        const grid = document.createElement('div');
+        grid.className = "options-grid";
+
+        q.opts.forEach((o, oIdx) => {
+          const opt = document.createElement('button');
+          opt.className = "option-btn";
+          opt.innerText = o;
+          opt.onclick = () => selectQuizOption(idx, oIdx, opt);
+          grid.appendChild(opt);
         });
 
-        itemDiv.appendChild(optGrid);
-        container.appendChild(itemDiv);
+        wrap.appendChild(grid);
+        pool.appendChild(wrap);
       });
-      updateQuizProgressBar(0);
+      syncProgressBarFill(0);
     }
 
-    function handleQuizSelection(qIdx, oIdx, buttonElement) {
-      const question = QUESTION_DATA[qIdx];
-      
-      if (question.type === 'mood') {
-        if (!onboardingAnswers[qIdx]) onboardingAnswers[qIdx] = [];
-        if (onboardingAnswers[qIdx].includes(oIdx)) return;
-        
-        onboardingAnswers[qIdx].push(oIdx);
-        buttonElement.classList.add('selected');
-
-        if (onboardingAnswers[qIdx].length === 2) {
-          setTimeout(() => progressQuizStep(qIdx), 400);
-        }
+    function selectQuizOption(qIdx, oIdx, btn) {
+      const q = QUIZ_QUESTIONS[qIdx];
+      if (q.type === 'mood') {
+        if (!quizStore[qIdx]) quizStore[qIdx] = [];
+        if (quizStore[qIdx].includes(oIdx)) return;
+        quizStore[qIdx].push(oIdx);
+        btn.classList.add('selected');
+        if (quizStore[qIdx].length === 2) { setTimeout(() => advanceQuiz(qIdx), 400); }
       } else {
-        if (buttonElement.parentNode.querySelector('.selected')) return;
-        onboardingAnswers[qIdx] = oIdx;
-        buttonElement.classList.add('selected');
-        setTimeout(() => progressQuizStep(qIdx), 300);
+        if (btn.parentNode.querySelector('.selected')) return;
+        quizStore[qIdx] = oIdx;
+        btn.classList.add('selected');
+        setTimeout(() => advanceQuiz(qIdx), 300);
       }
     }
 
-    function updateQuizProgressBar(currentStep) {
-      document.getElementById('quiz-progress').style.width = `${(currentStep / 10) * 100}%`;
+    function syncProgressBarFill(step) {
+      document.getElementById('q-fill').style.width = `${(step / 10) * 100}%`;
     }
 
-    function progressQuizStep(currentIdx) {
-      document.getElementById(`quiz-item-${currentIdx}`).style.display = 'none';
-      const nextIdx = currentIdx + 1;
-      updateQuizProgressBar(nextIdx);
+    function advanceQuiz(curr) {
+      document.getElementById(`q-item-${curr}`).style.display = 'none';
+      const next = curr + 1;
+      syncProgressBarFill(next);
 
-      if (nextIdx < 10) {
-        document.getElementById(`quiz-item-${nextIdx}`).style.display = 'block';
+      if (next < 10) {
+        document.getElementById(`q-item-${next}`).style.display = 'block';
       } else {
-        compileVectorMatrixEngine();
+        compileVectors();
       }
     }
 
-    function compileVectorMatrixEngine() {
-      let finalTraitVector = [];
-      let finalMoodVector = Array(8).fill(0);
+    function compileVectors() {
+      let traits = [];
+      let mood = Array(8).fill(0);
 
       for (let i = 0; i < 9; i++) {
-        const question = QUESTION_DATA[i];
-        const answer = onboardingAnswers[i];
-        if (question.type === 'scale') finalTraitVector.push(question.vals[answer]);
-        else {
-          let block = Array(question.slots).fill(0); block[answer] = 1;
-          finalTraitVector = finalTraitVector.concat(block);
+        const q = QUIZ_QUESTIONS[i];
+        const ans = quizStore[i];
+        if (q.type === 'scale') {
+          traits.push(q.vals[ans]);
+        } else {
+          let oneHot = Array(q.slots).fill(0);
+          oneHot[ans] = 1;
+          traits = traits.concat(oneHot);
         }
       }
-      (onboardingAnswers[9] || []).forEach(slot => finalMoodVector[slot] = 1);
 
-      localDB.users[sessionUser.uid].traitVector = finalTraitVector;
-      localDB.users[sessionUser.uid].moodVector = finalMoodVector;
+      const moodsSelected = quizStore[9] || [];
+      moodsSelected.forEach(mIdx => mood[mIdx] = 1);
+
+      localStorage.setItem(`userVector_${sessionUser.uid}`, JSON.stringify({ trait: traits, mood: mood, moodTime: Date.now() }));
+      alert('Cognitive profiling calculation absolute. Network access verified.');
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      const name = localStorage.getItem(`userName_${sessionUser.uid}`) || "User Node";
+      const avatar = localStorage.getItem(`userAvatar_${sessionUser.uid}`) || "🧠";
+      const bio = localStorage.getItem(`userBio_${sessionUser.uid}`) || "Broadcast stance undetected. Customize profile details matrix below.";
       
-      localStorage.setItem(`userVector_${sessionUser.uid}`, JSON.stringify({trait: finalTraitVector, mood: finalMoodVector}));
-      
-      alert("Profiling complete! Alignment vectors saved.");
-      executeProfileUIRender();
+      const likes = localStorage.getItem(`userLikes_${sessionUser.uid}`) || "0";
+      const conns = localStorage.getItem(`userConnections_${sessionUser.uid}`) || "0";
+      const matrixMatches = localStorage.getItem(`userDittosCount_${sessionUser.uid}`) || "0";
+
+      let root = document.getElementById('profile-root');
+      root.innerHTML = `
+        <div style="display:flex; align-items:center; gap:20px; margin-bottom:20px;">
+          <div style="font-size:55px;">${avatar}</div>
+          <div>
+            <h2>${name}</h2>
+            <p style="color:#10b981; margin:0; font-size:13px; font-weight:600;">✓ Synced Personality Matrix Active</p>
+          </div>
+        </div>
+
+        <div class="stat-bar">
+          <div class="stat-box"><div class="stat-num">${likes}</div><div class="stat-lbl">Likes received</div></div>
+          <div class="stat-box"><div class="stat-num">${matrixMatches}</div><div class="stat-lbl">Dittos Found</div></div>
+          <div class="stat-box"><div class="stat-num">${conns}</div><div class="stat-lbl">Connected</div></div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:20px 0;">
+
+        <h3>Adjust Display Handle</h3>
+        <input id="edit-display-name" type="text" value="${name}">
+
+        <h3>Update Philosophical Avatar Identity</h3>
+        <div class="avatar-grid" id="dashboard-avatar-grid"></div>
+
+        <h3>Consciousness Broadcast Bio</h3>
+        <textarea id="edit-bio" rows="3">${bio}</textarea>
+
+        <button class="btn" onclick="saveProfileOverride()">Save Changes</button>
+        <button class="btn btn-secondary" onclick="logoutSession()">Disconnect Session</button>
+      `;
+
+      const grid = document.getElementById('dashboard-avatar-grid');
+      PHILOSOPHICAL_AVATARS.forEach(a => {
+        const el = document.createElement('div');
+        el.className = `avatar-selectable ${a.char === avatar ? 'selected' : ''}`;
+        el.innerText = a.char;
+        el.onclick = () => {
+          document.querySelectorAll('#dashboard-avatar-grid .avatar-selectable').forEach(x => x.classList.remove('selected'));
+          el.classList.add('selected');
+          chosenAvatar = a.char;
+        };
+        grid.appendChild(el);
+      });
+      chosenAvatar = avatar;
     }
 
     window.saveProfileOverride = function() {
-      const n = document.getElementById('edit-display-name').value.trim();
-      if(n) {
-        localDB.users[sessionUser.uid].name = n;
-        localStorage.setItem(`userName_${sessionUser.uid}`, n);
-        alert("Handle configuration updated.");
-        executeProfileUIRender();
-      }
+      const newName = document.getElementById('edit-display-name').value.trim();
+      const newBio = document.getElementById('edit-edit-bio' ? document.getElementById('edit-bio').value.trim() : document.getElementById('edit-bio').value.trim());
+      if (!newName) { alert('Name field required.'); return; }
+      
+      localStorage.setItem(`userName_${sessionUser.uid}`, newName);
+      localStorage.setItem(`userAvatar_${sessionUser.uid}`, chosenAvatar);
+      localStorage.setItem(`userBio_${sessionUser.uid}`, newBio);
+      
+      alert('Profile updates saved successfully.');
+      renderDashboard();
     };
 
     window.logoutSession = async function() {
-      await signOut(auth);
-      sessionUser = null;
-      alert('Session terminated.');
-      window.location.href = 'index.html';
+      if (confirm('Terminate encryption pipeline session context?')) {
+        await signOut(auth);
+        window.location.href = "Index.html";
+      }
     };
 
-    const glow = document.getElementById("cursor-glow"); let cX = 0, cY = 0;
+    const glow = document.getElementById("cursor-glow");
+    let cX = 0, cY = 0;
     window.addEventListener("mousemove", (e) => {
       cX = e.clientX - 125; cY = e.clientY - 125;
       requestAnimationFrame(() => { glow.style.transform = `translate3d(${cX}px, ${cY}px, 0)`; });
