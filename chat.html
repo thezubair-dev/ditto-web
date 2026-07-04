@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ditto | Neural Channel</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    body {
+      background: #050510;
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: 
+        radial-gradient(circle at 20% 20%, #8b5cf6, transparent 25%),
+        radial-gradient(circle at 80% 30%, #06b6d4, transparent 25%),
+        radial-gradient(circle at 50% 90%, #10b981, transparent 25%);
+      filter: blur(80px);
+      animation: bgMove 8s infinite alternate ease-in-out;
+    }
+
+    @keyframes bgMove {
+      100% { transform: scale(1.1); }
+    }
+
+    .light {
+      position: fixed;
+      width: 250px;
+      height: 250px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      will-change: transform;
+    }
+
+    nav {
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 8%;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 900;
+      background: linear-gradient(90deg, #a855f7, #06b6d4, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-links button {
+      padding: 10px 22px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-links button:hover {
+      background: #10b981;
+      border-color: transparent;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+      transform: translateY(-3px);
+    }
+
+    .centered-layout {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 650px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    h2 { font-size: 24px; margin-bottom: 10px; }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 30px;
+      border-radius: 40px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    input {
+      width: 100%; padding: 14px; border-radius: 12px; margin: 10px 0;
+      background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12);
+      color: white; font-size: 15px; outline: none; transition: border-color 0.3s;
+    }
+    input:focus { border-color: #06b6d4; }
+
+    /* Chat Bridge Box */
+    .chat-box {
+      height: 350px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 12px;
+      padding: 15px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .msg { max-width: 75%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.4; }
+    .msg.sent { background: #06b6d4; align-self: flex-end; color: white; border-bottom-right-radius: 2px; }
+    .msg.received { background: rgba(255, 255, 255, 0.1); align-self: flex-start; color: white; border-bottom-left-radius: 2px; }
+  </style>
+</head>
+<body>
+
+  <div class="bg" aria-hidden="true"></div>
+  <div class="light" id="cursor-glow" aria-hidden="true"></div>
+
+  <nav>
+    <div class="logo" onclick="window.location.href='home.html'">Ditto.</div>
+    <div class="nav-links">
+      <button onclick="window.location.href='home.html'" id="nav-home">Home</button>
+      <button onclick="window.location.href='thoughts.html'" id="nav-feed">Thoughts</button>
+      <button onclick="window.location.href='dittos.html'" id="nav-dittos">Dittos</button>
+      <button onclick="window.location.href='profile.html'" id="nav-profile">Profile</button>
+    </div>
+  </nav>
+
+  <div style="display:flex; align-items:center; justify-content:center; padding:40px 8%; min-height:calc(100vh - 80px);">
+    <div class="card" style="max-width:600px; width:100%;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h2 id="chat-window-title" style="font-size:20px; margin-bottom:0;">Neural Bridge Matrix</h2>
+        <button onclick="window.location.href='dittos.html'" style="background:none; border:none; color:white; font-size:14px; cursor:pointer;">← Matrix</button>
+      </div>
+      <div class="chat-box" id="chat-message-display-pool"></div>
+      <div style="display:flex; gap:10px;">
+        <input id="chat-text-input" type="text" placeholder="Transmit thought string..." style="margin:0;">
+        <button class="btn" onclick="transmitChatMessage()" style="padding:0 22px;">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCRU2XnvDbSMKlOqAMijcUGYPC4RKg9nPM",
+      authDomain: "dittoweb.firebaseapp.com",
+      projectId: "dittoweb",
+      storageBucket: "dittoweb.firebasestorage.app",
+      messagingSenderId: "902164300349",
+      appId: "1:902164300349:web:307e58ba6e3e9dbc33a054",
+      measurementId: "G-JP34BSJ3RB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    let localDB = {
+      users: {
+        "node_artist": { uid: "node_artist", name: "Elena R.", avatar: "🎨" },
+        "node_builder": { uid: "node_builder", name: "Zubair (Engine)", avatar: "🚀" },
+        "node_dreamer": { uid: "node_dreamer", name: "Aria Fox", avatar: "🌙" }
+      },
+      chats: {}
+    };
+
+    let sessionUser = null;
+    let currentActiveChatNode = new URLSearchParams(window.location.search).get('node') || "node_artist";
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        alert("Please login first.");
+        window.location.href = 'login.html';
+        return;
+      }
+      sessionUser = user;
+      const targetUser = localDB.users[currentActiveChatNode] || { name: "Identity Node" };
+      document.getElementById('chat-window-title').innerText = `Neural Bridge → ${targetUser.name}`;
+      renderActiveChatLogs();
+    });
+
+    function renderActiveChatLogs() {
+      const pool = document.getElementById('chat-message-display-pool'); pool.innerHTML = "";
+      const cid = [sessionUser.uid, currentActiveChatNode].sort().join('_');
+      const msgs = localDB.chats[cid] || [{ sender: currentActiveChatNode, text: "Channel Handshake Sync Clear." }];
+      msgs.forEach(m => {
+        const div = document.createElement('div'); div.className = `msg ${m.sender === sessionUser.uid ? 'sent' : 'received'}`;
+        div.innerText = m.text; pool.appendChild(div);
+      });
+      pool.scrollTop = pool.scrollHeight;
+    }
+
+    window.transmitChatMessage = function() {
+      const inp = document.getElementById('chat-text-input'); if(!inp.value.trim()) return;
+      const cid = [sessionUser.uid, currentActiveChatNode].sort().join('_');
+      if(!localDB.chats[cid]) localDB.chats[cid] = [];
+      localDB.chats[cid].push({ sender: sessionUser.uid, text: inp.value.trim() });
+      inp.value = ""; renderActiveChatLogs();
+    };
+
+    const glow = document.getElementById("cursor-glow"); let cX = 0, cY = 0;
+    window.addEventListener("mousemove", (e) => {
+      cX = e.clientX - 125; cY = e.clientY - 125;
+      requestAnimationFrame(() => { glow.style.transform = `translate3d(${cX}px, ${cY}px, 0)`; });
+    });
+  </script>
+</body>
+</html>
