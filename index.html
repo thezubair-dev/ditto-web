@@ -1,896 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Ditto | Meet Minds</title>
-
-
-<style>
-
-
-*{
-
-margin:0;
-
-padding:0;
-
-box-sizing:border-box;
-
-font-family:'Segoe UI',
--apple-system,
-BlinkMacSystemFont,
-Roboto,
-sans-serif;
-
-}
-
-
-
-html,body{
-
-width:100%;
-
-overflow-x:hidden;
-
-}
-
-
-
-
-body{
-
-background:#050510;
-
-color:white;
-
-min-height:100vh;
-
-min-height:100dvh;
-
-display:flex;
-
-flex-direction:column;
-
-}
-
-
-
-
-/* BACKGROUND */
-
-
-.bg{
-
-position:fixed;
-
-inset:0;
-
-z-index:-2;
-
-
-background:
-
-radial-gradient(circle at 20% 20%,#8b5cf6,transparent 25%),
-
-radial-gradient(circle at 80% 30%,#06b6d4,transparent 25%),
-
-radial-gradient(circle at 50% 90%,#10b981,transparent 25%);
-
-
-filter:blur(80px);
-
-
-animation:bgMove 8s infinite alternate ease-in-out;
-
-}
-
-
-
-
-@keyframes bgMove{
-
-
-100%{
-
-transform:scale(1.1);
-
-}
-
-
-}
-
-
-
-
-.light{
-
-position:fixed;
-
-width:250px;
-
-height:250px;
-
-background:rgba(255,255,255,.1);
-
-border-radius:50%;
-
-filter:blur(80px);
-
-pointer-events:none;
-
-z-index:-1;
-
-}
-
-
-
-
-/* NAVBAR */
-
-
-nav{
-
-height:80px;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:0 8%;
-
-
-background:rgba(255,255,255,.04);
-
-backdrop-filter:blur(25px);
-
--webkit-backdrop-filter:blur(25px);
-
-
-position:sticky;
-
-top:0;
-
-z-index:10;
-
-
-border-bottom:1px solid rgba(255,255,255,.05);
-
-}
-
-
-
-
-.logo{
-
-font-size:32px;
-
-font-weight:900;
-
-
-background:linear-gradient(
-90deg,#a855f7,#06b6d4,#10b981
-);
-
-
--webkit-background-clip:text;
-
--webkit-text-fill-color:transparent;
-
-cursor:pointer;
-
-}
-
-
-
-
-.nav-links{
-
-display:flex;
-
-gap:10px;
-
-}
-
-
-
-
-.nav-links button{
-
-padding:10px 22px;
-
-border-radius:30px;
-
-
-border:1px solid rgba(255,255,255,.1);
-
-
-background:rgba(255,255,255,.03);
-
-
-color:white;
-
-cursor:pointer;
-
-transition:.3s;
-
-font-size:14px;
-
-}
-
-
-
-
-.nav-links button:hover{
-
-background:#10b981;
-
-box-shadow:0 0 20px rgba(16,185,129,.5);
-
-transform:translateY(-3px);
-
-}
-
-
-
-
-.active-nav{
-
-background:rgba(255,255,255,.12)!important;
-
-border-color:#06b6d4!important;
-
-}
-
-
-
-
-/* HERO */
-
-
-.hero-section{
-
-flex:1;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-flex-direction:column;
-
-text-align:center;
-
-padding:60px 8%;
-
-}
-
-
-
-
-h1{
-
-font-size:56px;
-
-font-weight:800;
-
-max-width:850px;
-
-line-height:1.1;
-
-letter-spacing:-1px;
-
-margin-bottom:20px;
-
-}
-
-
-
-/* RESTORED COLORFUL TEXT */
-
-h1 span{
-
-
-background:linear-gradient(
-90deg,#06b6d4,#8b5cf6,#10b981
-);
-
-
--webkit-background-clip:text;
-
-
--webkit-text-fill-color:transparent;
-
-
-}
-
-
-
-
-
-p{
-
-font-size:18px;
-
-color:#94a3b8;
-
-max-width:600px;
-
-line-height:1.6;
-
-margin-bottom:35px;
-
-}
-
-
-
-
-.btn{
-
-display:inline-block;
-
-padding:16px 36px;
-
-border-radius:40px;
-
-
-background:linear-gradient(
-90deg,#8b5cf6,#06b6d4
-);
-
-
-color:white;
-
-text-decoration:none;
-
-font-weight:600;
-
-transition:.3s;
-
-}
-
-
-
-
-.btn:hover{
-
-transform:translateY(-3px);
-
-box-shadow:0 10px 30px #8b5cf6;
-
-}
-/* MOBILE RESPONSIVE */
-
-@media(max-width:768px){
-
-
-nav{
-
-height:auto;
-
-padding:18px 5%;
-
-flex-direction:column;
-
-gap:15px;
-
-}
-
-
-
-.logo{
-
-font-size:30px;
-
-}
-
-
-
-
-.nav-links{
-
-width:100%;
-
-display:grid;
-
-grid-template-columns:repeat(2,1fr);
-
-gap:10px;
-
-}
-
-
-
-
-.nav-links button{
-
-width:100%;
-
-padding:10px;
-
-font-size:13px;
-
-}
-
-
-
-
-.hero-section{
-
-padding:60px 20px;
-
-justify-content:flex-start;
-
-}
-
-
-
-
-h1{
-
-font-size:clamp(34px,10vw,45px);
-
-line-height:1.15;
-
-word-break:break-word;
-
-}
-
-
-
-p{
-
-font-size:15px;
-
-width:100%;
-
-}
-
-
-
-.btn{
-
-width:100%;
-
-max-width:300px;
-
-text-align:center;
-
-}
-
-
-
-
-.light{
-
-display:none;
-
-}
-
-
-
-.bg{
-
-filter:blur(50px);
-
-}
-
-
-
-}
-
-
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ditto | Meet Minds</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+    body {
+      background: #050510;
+      color: white;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: 
+        radial-gradient(circle at 20% 20%, #8b5cf6, transparent 25%),
+        radial-gradient(circle at 80% 30%, #06b6d4, transparent 25%),
+        radial-gradient(circle at 50% 90%, #10b981, transparent 25%);
+      filter: blur(80px);
+      animation: bgMove 8s infinite alternate ease-in-out;
+    }
+    @keyframes bgMove { 100% { transform: scale(1.1); } }
+    .light {
+      position: fixed;
+      width: 250px;
+      height: 250px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: -1;
+      will-change: transform;
+    }
+    nav {
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 8%;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: 900;
+      background: linear-gradient(90deg, #a855f7, #06b6d4, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      cursor: pointer;
+    }
+    .nav-links { display: flex; gap: 10px; }
+    .nav-links button {
+      padding: 10px 22px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 14px;
+    }
+    .nav-links button:hover {
+      background: #10b981;
+      border-color: transparent;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+      transform: translateY(-3px);
+    }
+    .active-nav {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: #06b6d4 !important;
+    }
+    .hero-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 60px 8%;
+    }
+    h1 {
+      font-size: 56px;
+      font-weight: 800;
+      max-width: 850px;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+    h1 span {
+      background: linear-gradient(90deg, #06b6d4, #8b5cf6, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p {
+      font-size: 18px;
+      color: #94a3b8;
+      max-width: 600px;
+      line-height: 1.6;
+      margin-bottom: 35px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 16px 36px;
+      border-radius: 40px;
+      background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.5);
+    }
+    .preview-container {
+      width: 100%;
+      max-width: 850px;
+      margin: 0 auto 60px auto;
+      padding: 0 20px;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 30px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      text-align: left;
+      position: relative;
+    }
+    .card-badge {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid #06b6d4;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #06b6d4;
+      font-weight: 600;
+    }
+    .card-tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 12px;
+      margin-right: 6px;
+      color: #cbd5e1;
+    }
+    @media(max-width:768px){
+      nav { height: auto; padding: 18px 5%; flex-direction: column; gap: 15px; }
+      .logo { font-size: 30px; }
+      .nav-links { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .nav-links button { width: 100%; padding: 10px; font-size: 13px; }
+      .hero-section { padding: 40px 20px; justify-content: flex-start; }
+      h1 { font-size: clamp(32px, 8vw, 45px); line-height: 1.15; word-break: break-word; }
+      p { font-size: 15px; width: 100%; }
+      .btn { width: 100%; max-width: 300px; text-align: center; }
+      .light { display: none; }
+      .bg { filter: blur(50px); }
+    }
+  </style>
 </head>
-
-
-
 <body>
 
-
-
-<div class="bg"></div>
-
-<div class="light" id="cursor-glow"></div>
-
-
-
-
-
-<nav>
-
-
-
-<div class="logo" id="logo-redirect">
-
-Ditto.
-
-</div>
-
-
-
-
-<div class="nav-links" id="dynamic-nav-links">
-
-
-<button onclick="window.location.href='index.html'" class="active-nav">
-
-Home
-
-</button>
-
-
-
-<button onclick="window.location.href='login.html'">
-
-Sign In
-
-</button>
-
-
-
-</div>
-
-
-</nav>
-
-
-
-
-
-
-
-<main class="hero-section">
-
-
-
-<h1>
-
-Ever felt the world doesn't
-
-<span>
-
-understand you..
-
-</span>
-
-
-</h1>
-
-
-
-
-<p>
-
-Not anymore. Connect with like minded people.
-
-</p>
-
-
-
-
-
-
-<div id="hero-action-container">
-
-
-<a href="login.html" class="btn">
-
-Find my Ditto ✨
-
-</a>
-
-
-</div>
-
-
-
-</main>
-
-
-
-
-
-
-
-
-<script type="module">
-
-
-import { initializeApp } 
-from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-
-
-
-import {
-
-getAuth,
-
-onAuthStateChanged
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-
-
-
-
-
-
-const firebaseConfig={
-
-
-apiKey:"AIzaSyCRU2XnvDbSMKlOqAMijcUGYPC4RKg9nPM",
-
-
-authDomain:"dittoweb.firebaseapp.com",
-
-
-projectId:"dittoweb",
-
-
-storageBucket:"dittoweb.firebasestorage.app",
-
-
-messagingSenderId:"902164300349",
-
-
-appId:"1:902164300349:web:307e58ba6e3e9dbc33a054",
-
-
-measurementId:"G-JP34BSJ3RB"
-
-
-};
-
-
-
-
-
-
-const app = initializeApp(firebaseConfig);
-
-
-const auth = getAuth(app);
-
-
-
-
-
-
-
-onAuthStateChanged(auth,(user)=>{
-
-
-
-const navLinks =
-document.getElementById("dynamic-nav-links");
-
-
-
-const heroAction =
-document.getElementById("hero-action-container");
-
-
-
-const logo =
-document.getElementById("logo-redirect");
-
-
-
-
-
-
-
-if(user){
-
-
-
-logo.onclick=()=>{
-
-window.location.href="index.html";
-
-};
-
-
-
-
-
-navLinks.innerHTML=`
-
-
-<button onclick="window.location.href='index.html'" class="active-nav">
-
-Home
-
-</button>
-
-
-
-<button onclick="window.location.href='thoughts.html'">
-
-Thoughts
-
-</button>
-
-
-
-<button onclick="window.location.href='dittos.html'">
-
-Dittos
-
-</button>
-
-
-
-<button onclick="window.location.href='profile.html'">
-
-Profile
-
-</button>
-
-
-`;
-
-
-
-
-
-
-heroAction.innerHTML=`
-
-
-<a href="thoughts.html" class="btn">
-
-Find my Ditto ✨
-
-</a>
-
-
-`;
-
-
-
-}
-
-
-
-
-
-
-else{
-
-
-
-logo.onclick=()=>{
-
-window.location.href="index.html";
-
-};
-
-
-
-
-
-navLinks.innerHTML=`
-
-
-<button onclick="window.location.href='index.html'" class="active-nav">
-
-Home
-
-</button>
-
-
-
-<button onclick="window.location.href='login.html'">
-
-Sign In
-
-</button>
-
-
-`;
-
-
-
-
-
-
-heroAction.innerHTML=`
-
-
-<a href="login.html" class="btn">
-
-Find my Ditto ✨
-
-</a>
-
-
-`;
-
-
-
-}
-
-
-
-});
-
-
-
-
-
-
-
-
-
-/* CURSOR GLOW */
-
-
-const glow =
-
-document.getElementById("cursor-glow");
-
-
-
-let cX=0;
-
-let cY=0;
-
-
-
-
-if(window.matchMedia("(pointer:fine)").matches){
-
-
-
-window.addEventListener("mousemove",(e)=>{
-
-
-
-cX=e.clientX-125;
-
-
-cY=e.clientY-125;
-
-
-
-
-requestAnimationFrame(()=>{
-
-
-glow.style.transform=
-
-`translate3d(${cX}px,${cY}px,0)`;
-
-
-});
-
-
-
-});
-
-
-
-}
-
-
-
-</script>
-
-
-
+  <div class="bg" aria-hidden="true"></div>
+  <div class="light" id="cursor-glow" aria-hidden="true"></div>
+
+  <nav>
+    <div class="logo" id="logo-redirect">Ditto.</div>
+    <div class="nav-links" id="dynamic-nav-links">
+      <button onclick="window.location.href='Index.html'" class="active-nav">Home</button>
+      <button onclick="window.location.href='Login.html'">Sign In</button>
+    </div>
+  </nav>
+
+  <main class="hero-section">
+    <h1>Ever felt the world doesn't <span>understand you...</span></h1>
+    <p>Connect with like-minded people. Where minds meet before appearances.</p>
+
+    <div id="hero-action-container" style="width: 100%; display: flex; justify-content: center; margin-bottom: 50px;">
+      <a href="Login.html" class="btn">Find my Ditto ✨</a>
+    </div>
+
+    <div class="preview-container">
+      <div class="glass-card">
+        <span class="card-badge">96% Mind Match</span>
+        <div style="font-size: 40px; margin-bottom: 10px;">🧠</div>
+        <h3 style="font-size: 20px; margin-bottom: 5px;">The Thinker</h3>
+        <p style="font-size: 14px; margin: 5px 0 15px 0; color: #cbd5e1;">"Ideas build the future. Seeking meaningful conversations, understanding perspectives, and discovering shared core values."</p>
+        <div>
+          <span class="card-tag">#Philosophy</span>
+          <span class="card-tag">#AI</span>
+          <span class="card-tag">#Future</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCRU2XnvDbSMKlOqAMijcUGYPC4RKg9nPM",
+      authDomain: "dittoweb.firebaseapp.com",
+      projectId: "dittoweb",
+      storageBucket: "dittoweb.firebasestorage.app",
+      messagingSenderId: "902164300349",
+      appId: "1:902164300349:web:307e58ba6e3e9dbc33a054",
+      measurementId: "G-JP34BSJ3RB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      const navLinks = document.getElementById("dynamic-nav-links");
+      const heroAction = document.getElementById("hero-action-container");
+      const logo = document.getElementById("logo-redirect");
+
+      logo.onclick = () => { window.location.href = "Index.html"; };
+
+      if (user) {
+        navLinks.innerHTML = `
+          <button onclick="window.location.href='Index.html'" class="active-nav">Home</button>
+          <button onclick="window.location.href='Thoughts.html'">Thoughts</button>
+          <button onclick="window.location.href='Dittos.html'">Dittos</button>
+          <button onclick="window.location.href='Profiles.html'">Profile</button>
+        `;
+        heroAction.innerHTML = `
+          <a href="Profiles.html" class="btn">Find my Ditto ✨</a>
+        `;
+      } else {
+        navLinks.innerHTML = `
+          <button onclick="window.location.href='Index.html'" class="active-nav">Home</button>
+          <button onclick="window.location.href='Login.html'">Sign In</button>
+        `;
+        heroAction.innerHTML = `
+          <a href="Login.html" class="btn">Find my Ditto ✨</a>
+        `;
+      }
+    });
+
+    const glow = document.getElementById("cursor-glow");
+    let cX = 0, cY = 0;
+    if (window.matchMedia("(pointer:fine)").matches) {
+      window.addEventListener("mousemove", (e) => {
+        cX = e.clientX - 125;
+        cY = e.clientY - 125;
+        requestAnimationFrame(() => {
+          glow.style.transform = `translate3d(${cX}px, ${cY}px, 0)`;
+        });
+      });
+    }
+  </script>
 </body>
-
-
 </html>
