@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ditto | Access Node</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    body {
+      background: #050510;
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: 
+        radial-gradient(circle at 20% 20%, #8b5cf6, transparent 25%),
+        radial-gradient(circle at 80% 30%, #06b6d4, transparent 25%),
+        radial-gradient(circle at 50% 90%, #10b981, transparent 25%);
+      filter: blur(80px);
+      animation: bgMove 8s infinite alternate ease-in-out;
+    }
+
+    @keyframes bgMove {
+      100% { transform: scale(1.1); }
+    }
+
+    .light {
+      position: fixed;
+      width: 250px;
+      height: 250px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      will-change: transform;
+    }
+
+    nav {
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 8%;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 900;
+      background: linear-gradient(90deg, #a855f7, #06b6d4, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-links button {
+      padding: 10px 22px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-links button:hover {
+      background: #10b981;
+      border-color: transparent;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+      transform: translateY(-3px);
+    }
+
+    section {
+      display: none;
+      padding: 40px 8%;
+      min-height: calc(100vh - 80px);
+    }
+
+    section.active {
+      display: grid;
+      animation: fadeIn 0.4s forwards ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .centered-layout {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 650px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    h1 { font-size: 40px; margin-bottom: 15px; letter-spacing: -0.5px; }
+    p { color: #b3b3b3; font-size: 16px; margin: 15px 0; line-height: 1.6; }
+    h2 { font-size: 24px; margin-bottom: 10px; }
+    h3 { font-size: 18px; color: #f1f5f9; }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 30px;
+      border-radius: 40px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .avatar { font-size: 60px; margin-bottom: 15px; text-shadow: 0 0 15px rgba(255,255,255,0.2); }
+    
+    .avatar-selectable {
+      font-size: 45px; padding: 12px; border-radius: 16px;
+      background: rgba(255,255,255,0.03); border: 2px solid transparent;
+      cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .avatar-selectable:hover { background: rgba(255,255,255,0.08); transform: scale(1.05); }
+    .avatar-selectable.selected { border-color: #06b6d4; background: rgba(6, 182, 212, 0.1); }
+
+    input, textarea {
+      width: 100%; padding: 14px; border-radius: 12px; margin: 10px 0;
+      background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12);
+      color: white; font-size: 15px; outline: none; transition: border-color 0.3s;
+    }
+    input:focus, textarea:focus { border-color: #06b6d4; }
+
+    /* Profiling Form Element Sheets */
+    .quiz-container { width: 100%; margin-top: 20px; }
+    .quiz-item { display: none; }
+    .quiz-item.active { display: block; animation: fadeIn 0.3s ease; }
+    .options-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+    .option-btn {
+      width: 100%; padding: 15px 20px; border-radius: 14px; text-align: left;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      color: white; font-size: 15px; cursor: pointer; transition: all 0.2s;
+    }
+    .option-btn:hover { background: rgba(255,255,255,0.08); border-color: #8b5cf6; padding-left: 25px; }
+    .option-btn.selected { background: rgba(139, 92, 246, 0.2); border-color: #8b5cf6; }
+    
+    .progress-bar-container { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #8b5cf6, #06b6d4); transition: width 0.3s; }
+
+    .auth-footer { display: flex; justify-content: space-between; margin-top: 20px; font-size: 14px; }
+    .auth-link { color: #06b6d4; cursor: pointer; }
+    .auth-view { display: none; }
+    .auth-view.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="bg" aria-hidden="true"></div>
+  <div class="light" id="cursor-glow" aria-hidden="true"></div>
+
+  <nav>
+    <div class="logo" onclick="window.location.href='home.html'">Ditto.</div>
+    <div class="nav-links">
+      <button onclick="window.location.href='home.html'" id="nav-home">Home</button>
+      <button onclick="window.location.href='thoughts.html'" id="nav-feed">Thoughts</button>
+      <button onclick="window.location.href='dittos.html'" id="nav-dittos">Dittos</button>
+      <button onclick="window.location.href='profile.html'" id="nav-profile">Profile</button>
+    </div>
+  </nav>
+
+  <section id="signup" class="active">
+    <div class="centered-layout">
+      <div class="card">
+        <div id="view-signup" class="auth-view active">
+          <h1>Create Account</h1>
+          <p style="font-size: 14px; margin-bottom: 15px;">Initialize your mind space token profile.</p>
+          <input id="username" type="text" placeholder="Desired Username" autocomplete="off">
+          <input id="email" type="email" placeholder="Email Address" autocomplete="off">
+          <input id="password" type="password" placeholder="Secure Password">
+          <button class="btn" style="margin-top: 15px; width:100%;" onclick="handleAuthSubmit('signup')">Register Mind Account</button>
+          <div class="auth-footer">
+            <span>Already setup?</span>
+            <span class="auth-link" onclick="toggleAuthMode('login')">Access account</span>
+          </div>
+        </div>
+
+        <div id="view-login" class="auth-view">
+          <h1>Welcome Back</h1>
+          <p style="font-size: 14px; margin-bottom: 15px;">Synchronize into your consciousness matrix.</p>
+          <input id="login-email" type="email" placeholder="Email Address" autocomplete="off">
+          <input id="login-password" type="password" placeholder="Password">
+          <button class="btn" style="margin-top: 15px; width:100%;" onclick="handleAuthSubmit('login')">Authorize Access</button>
+          <div class="auth-footer">
+            <span class="auth-link" onclick="toggleAuthMode('forgot')">Forgot Password?</span>
+            <span class="auth-link" onclick="toggleAuthMode('signup')">New Account</span>
+          </div>
+        </div>
+
+        <div id="view-forgot" class="auth-view">
+          <h1>Recover Account</h1>
+          <input id="forgot-email" type="email" placeholder="Your Registration Email" autocomplete="off">
+          <button class="btn" style="margin-top: 15px; width:100%;" onclick="handleAuthSubmit('forgot')">Send Reset Path</button>
+          <div class="auth-footer" style="justify-content: center;">
+            <span class="auth-link" onclick="toggleAuthMode('login')">Return to Verification</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="profiler">
+    <div class="centered-layout" style="max-width: 700px;">
+      <div class="card">
+        <div id="profiler-setup-step">
+          <h1>Complete Profile Setup</h1>
+          <p>Before using the match engine, you must complete your profile metadata card and answer the 10 core trait logic questions.</p>
+          
+          <h3 style="margin-top:20px; margin-bottom:10px;">Select Avatar Node Asset</h3>
+          <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; margin-bottom:20px;">
+            <div class="avatar-selectable" onclick="selectAvatar(this, '🧠')">🧠</div>
+            <div class="avatar-selectable" onclick="selectAvatar(this, '🎨')">🎨</div>
+            <div class="avatar-selectable" onclick="selectAvatar(this, '🚀')">🚀</div>
+            <div class="avatar-selectable" onclick="selectAvatar(this, '🌙')">🌙</div>
+            <div class="avatar-selectable" onclick="selectAvatar(this, '🔍')">🔍</div>
+            <div class="avatar-selectable" onclick="selectAvatar(this, '⚡')">⚡</div>
+            <div class="avatar-selectable" onclick="selectAvatar(this, '🍀')">🍀</div>
+            <div class="avatar-selectable" onclick="selectAvatar(this, '🎭')">🎭</div>
+          </div>
+
+          <h3>Confirm Handle Name</h3>
+          <input id="profile-display-name" type="text" placeholder="Display Name Identifier">
+          
+          <button class="btn" style="width:100%; margin-top:15px;" onclick="advanceToQuiz()">Unlock Cognitive Calibration Quiz</button>
+        </div>
+
+        <div id="profiler-quiz-step" style="display:none;">
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="quiz-progress"></div>
+          </div>
+          <div id="quiz-window" class="quiz-container">
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { 
+      getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, 
+      sendPasswordResetEmail, onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCRU2XnvDbSMKlOqAMijcUGYPC4RKg9nPM",
+      authDomain: "dittoweb.firebaseapp.com",
+      projectId: "dittoweb",
+      storageBucket: "dittoweb.firebasestorage.app",
+      messagingSenderId: "902164300349",
+      appId: "1:902164300349:web:307e58ba6e3e9dbc33a054",
+      measurementId: "G-JP34BSJ3RB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    let localDB = {
+      users: {}
+    };
+
+    let sessionUser = null; 
+    let selectedAvatarOnboarding = "";
+    let onboardingAnswers = {};
+
+    const QUESTION_DATA = [
+      { q: "When you've had a long or tiring day, what helps you feel better?", type: "scale", opts: ["Talking to people about it", "Being alone in silence", "A bit of both, depends on the day", "Doing something active alone, like walking or listening to music"], vals: [1.0, 0.0, 0.5, 0.3] },
+      { q: "When you are feeling low or upset, what do you usually do first?", type: "one-hot", slots: 4, opts: ["Talk to someone about what I'm feeling", "Distract myself with something else, like scrolling or watching something", "Sit alone with the feeling and think it through", "Keep myself busy so I don't have to think about it"] },
+      { q: "How often do small problems or setbacks ruin your mood for the whole day?", type: "scale", opts: ["Almost every time", "Quite often", "Rarely", "Almost never"], vals: [1.0, 0.66, 0.33, 0.0] },
+      { q: "What kind of conversation do you enjoy the most?", type: "scale", opts: ["Deep talks about life, meaning, or big ideas", "Practical talks about plans, goals, or real problems", "Light and fun talks, jokes, random topics", "It depends completely on my mood that day"], vals: [1.0, 0.5, 0.3, 0.5] },
+      { q: "When a friend shares a problem with you, what do you naturally do?", type: "one-hot", slots: 4, opts: ["Just listen and make them feel understood", "Try to give advice or solutions", "Share a similar experience I've been through", "Ask more questions to understand them better"] },
+      { q: "When you share something personal, what do you want from the other person?", type: "one-hot", slots: 4, opts: ["For them to say 'I understand' or 'me too'", "For them to question or challenge my thinking", "Nothing really, I just want to express it", "For them to ask more about how I feel"] },
+      { q: "How often do you feel like no one really understands you?", type: "scale", opts: ["Very often", "Sometimes", "Rarely", "Almost never"], vals: [1.0, 0.66, 0.33, 0.0] },
+      { q: "Right now in your life, what matters to you the most?", type: "one-hot", slots: 5, opts: ["Feeling connected to people", "Growing and achieving things", "Having freedom and independence", "Feeling safe and secure", "Finding meaning or purpose in life"] },
+      { q: "When you disagree with someone, what do you usually do?", type: "one-hot", slots: 4, opts: ["Avoid the conflict and let it go", "Say what I think, even if it creates tension", "Try to find a middle ground", "Agree with them just to keep the peace"] },
+      { q: "Right now, how are you feeling?", type: "mood", slots: 8, opts: ["Excited", "Anxious", "Content", "Lonely", "Hopeful", "Numb", "Motivated", "Overwhelmed"] }
+    ];
+
+    window.toggleAuthMode = function(mode) {
+      document.querySelectorAll('.auth-view').forEach(v => v.classList.remove('active'));
+      document.getElementById(`view-${mode}`).classList.add('active');
+    };
+
+    window.handleAuthSubmit = async function(type) {
+      if (type === 'signup') {
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        if(!username || !email || !password) { alert('All fields required.'); return; }
+        try {
+          const res = await createUserWithEmailAndPassword(auth, email, password);
+          localDB.users[res.user.uid] = { uid: res.user.uid, name: username, avatar: "👤", traitVector: null, moodVector: null, bio: "Awaiting calculation configuration.", likesCount: 0 };
+          alert('Account Created! Let\'s complete your profile and 10 questions now.');
+          document.getElementById('signup').classList.remove('active');
+          document.getElementById('profiler').classList.add('active');
+        } catch (e) { alert(e.message); }
+      } 
+      else if (type === 'login') {
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          window.location.href = 'thoughts.html';
+        } catch (e) { alert(e.message); }
+      }
+      else if (type === 'forgot') {
+        const email = document.getElementById('forgot-email').value.trim();
+        if(!email) { alert('Provide an email address.'); return; }
+        try {
+          await sendPasswordResetEmail(auth, email);
+          alert('Reset configuration string transmitted.');
+          toggleAuthMode('login');
+        } catch (e) { alert(e.message); }
+      }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        sessionUser = user;
+        if (!localDB.users[user.uid]) {
+          localDB.users[user.uid] = { uid: user.uid, name: user.email.split('@')[0], avatar: "👤", traitVector: null, moodVector: null, bio: "System Node User", likesCount: 0 };
+        }
+      } else {
+        sessionUser = null;
+      }
+    });
+
+    window.selectAvatar = function(element, char) {
+      document.querySelectorAll('.avatar-selectable').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+      selectedAvatarOnboarding = char;
+    };
+
+    window.advanceToQuiz = function() {
+      const dName = document.getElementById('profile-display-name').value.trim();
+      if(!selectedAvatarOnboarding) { alert('Select an avatar asset.'); return; }
+      if(!dName) { alert('Provide a display name.'); return; }
+      
+      if(sessionUser) {
+        localDB.users[sessionUser.uid].name = dName;
+        localDB.users[sessionUser.uid].avatar = selectedAvatarOnboarding;
+      }
+      document.getElementById('profiler-setup-step').style.display = 'none';
+      document.getElementById('profiler-quiz-step').style.display = 'block';
+      buildQuizCoreDOM();
+    };
+
+    function buildQuizCoreDOM() {
+      const container = document.getElementById('quiz-window');
+      container.innerHTML = "";
+      onboardingAnswers = {};
+
+      QUESTION_DATA.forEach((question, idx) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = `quiz-item ${idx === 0 ? 'active' : ''}`;
+        itemDiv.id = `quiz-item-${idx}`;
+
+        const qTitle = document.createElement('h2');
+        qTitle.innerText = `Question ${idx + 1} of 10: ${question.q}`;
+        itemDiv.appendChild(qTitle);
+
+        const optGrid = document.createElement('div');
+        optGrid.className = "options-grid";
+
+        question.opts.forEach((optionText, oIdx) => {
+          const btn = document.createElement('button');
+          btn.className = "option-btn";
+          btn.innerText = optionText;
+          btn.onclick = () => handleQuizSelection(idx, oIdx, btn);
+          optGrid.appendChild(btn);
+        });
+
+        itemDiv.appendChild(optGrid);
+        container.appendChild(itemDiv);
+      });
+      updateQuizProgressBar(0);
+    }
+
+    function handleQuizSelection(qIdx, oIdx, buttonElement) {
+      const question = QUESTION_DATA[qIdx];
+      if (buttonElement.parentNode.querySelector('.selected') && question.type !== 'mood') return;
+
+      if (question.type === 'mood') {
+        if (!onboardingAnswers[qIdx]) onboardingAnswers[qIdx] = [];
+        if (onboardingAnswers[qIdx].includes(oIdx)) return;
+        
+        onboardingAnswers[qIdx].push(oIdx);
+        buttonElement.classList.add('selected');
+
+        if (onboardingAnswers[qIdx].length === 2) {
+          setTimeout(() => progressQuizStep(qIdx), 400);
+        }
+      } else {
+        onboardingAnswers[qIdx] = oIdx;
+        buttonElement.classList.add('selected');
+        setTimeout(() => progressQuizStep(qIdx), 300);
+      }
+    }
+
+    function updateQuizProgressBar(currentStep) {
+      document.getElementById('quiz-progress').style.width = `${(currentStep / 10) * 100}%`;
+    }
+
+    function progressQuizStep(currentIdx) {
+      document.getElementById(`quiz-item-${currentIdx}`).classList.remove('active');
+      const nextIdx = currentIdx + 1;
+      updateQuizProgressBar(nextIdx);
+
+      if (nextIdx < 10) {
+        document.getElementById(`quiz-item-${nextIdx}`).classList.add('active');
+      } else {
+        compileVectorMatrixEngine();
+      }
+    }
+
+    function compileVectorMatrixEngine() {
+      let finalTraitVector = [];
+      let finalMoodVector = Array(8).fill(0);
+
+      for (let i = 0; i < 9; i++) {
+        const question = QUESTION_DATA[i];
+        const answer = onboardingAnswers[i];
+        if (question.type === 'scale') finalTraitVector.push(question.vals[answer]);
+        else {
+          let block = Array(question.slots).fill(0); block[answer] = 1;
+          finalTraitVector = finalTraitVector.concat(block);
+        }
+      }
+      (onboardingAnswers[9] || []).forEach(slot => finalMoodVector[slot] = 1);
+
+      if(sessionUser) {
+        localDB.users[sessionUser.uid].traitVector = finalTraitVector;
+        localDB.users[sessionUser.uid].moodVector = finalMoodVector;
+        localStorage.setItem(`userVector_${sessionUser.uid}`, JSON.stringify({trait: finalTraitVector, mood: finalMoodVector}));
+      }
+      alert("Profiling complete! Your matching network is unlocked.");
+      window.location.href = 'dittos.html';
+    }
+
+    const glow = document.getElementById("cursor-glow"); let cX = 0, cY = 0;
+    window.addEventListener("mousemove", (e) => {
+      cX = e.clientX - 125; cY = e.clientY - 125;
+      requestAnimationFrame(() => { glow.style.transform = `translate3d(${cX}px, ${cY}px, 0)`; });
+    });
+  </script>
+</body>
+</html>
