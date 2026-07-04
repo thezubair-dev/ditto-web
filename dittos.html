@@ -239,12 +239,6 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-
-onAuthStateChanged(auth, (user) => {
-    if (!user) {
-        window.location.href = "login.htm";
-    }
-});
     
     let localDB = {
       users: {
@@ -277,10 +271,10 @@ onAuthStateChanged(auth, (user) => {
       return Math.min(1.0, Math.max(0.0, (0.7 * traitScore) + (0.3 * stateScore)));
     }
 
+    // Global Session Protection & View Dashboard Handshaker
     onAuthStateChanged(auth, (user) => {
       if (!user) {
-        alert("Please login first.");
-        window.location.href = 'login.html';
+        window.location.href = 'login.htm';
         return;
       }
       sessionUser = user;
