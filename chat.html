@@ -96,15 +96,6 @@
       transform: translateY(-3px);
     }
 
-    .centered-layout {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 650px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
     h2 { font-size: 24px; margin-bottom: 10px; }
 
     .btn {
@@ -140,7 +131,6 @@
     }
     input:focus { border-color: #06b6d4; }
 
-    /* Chat Bridge Box */
     .chat-box {
       height: 350px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 12px;
       padding: 15px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.05);
@@ -159,10 +149,10 @@
   <nav>
     <div class="logo" onclick="window.location.href='index.html'">Ditto.</div>
     <div class="nav-links">
-      <button onclick="window.location.href='index.html'" id="nav-home">Home</button>
-      <button onclick="window.location.href='thoughts.html'" id="nav-feed">Thoughts</button>
-      <button onclick="window.location.href='dittos.html'" id="nav-dittos">Dittos</button>
-      <button onclick="window.location.href='profile.html'" id="nav-profile">Profile</button>
+      <button onclick="window.location.href='index.html'">Home</button>
+      <button onclick="window.location.href='thoughts.html'">Thoughts</button>
+      <button onclick="window.location.href='dittos.html'">Dittos</button>
+      <button onclick="window.location.href='profile.html'">Profile</button>
     </div>
   </nav>
 
@@ -202,17 +192,15 @@
         "node_artist": { uid: "node_artist", name: "Elena R.", avatar: "🎨" },
         "node_builder": { uid: "node_builder", name: "Zubair (Engine)", avatar: "🚀" },
         "node_dreamer": { uid: "node_dreamer", name: "Aria Fox", avatar: "🌙" }
-      },
-      chats: {}
+      }
     };
 
     let sessionUser = null;
     let currentActiveChatNode = new URLSearchParams(window.location.search).get('node') || "node_artist";
 
-    // Global Session Protection & Node Loader Loop
     onAuthStateChanged(auth, (user) => {
       if (!user) {
-        window.location.href = 'login.htm';
+        window.location.href = 'login.html';
         return;
       }
       sessionUser = user;
@@ -224,7 +212,11 @@
     function renderActiveChatLogs() {
       const pool = document.getElementById('chat-message-display-pool'); pool.innerHTML = "";
       const cid = [sessionUser.uid, currentActiveChatNode].sort().join('_');
-      const msgs = localDB.chats[cid] || [{ sender: currentActiveChatNode, text: "Channel Handshake Sync Clear." }];
+      
+      // Load chats from localStorage persistent store or fall back to clear message
+      const persistentChats = JSON.parse(localStorage.getItem('ditto_chats_v1') || '{}');
+      const msgs = persistentChats[cid] || [{ sender: currentActiveChatNode, text: "Channel Handshake Sync Clear." }];
+      
       msgs.forEach(m => {
         const div = document.createElement('div'); div.className = `msg ${m.sender === sessionUser.uid ? 'sent' : 'received'}`;
         div.innerText = m.text; pool.appendChild(div);
@@ -235,10 +227,21 @@
     window.transmitChatMessage = function() {
       const inp = document.getElementById('chat-text-input'); if(!inp.value.trim()) return;
       const cid = [sessionUser.uid, currentActiveChatNode].sort().join('_');
-      if(!localDB.chats[cid]) localDB.chats[cid] = [];
-      localDB.chats[cid].push({ sender: sessionUser.uid, text: inp.value.trim() });
-      inp.value = ""; renderActiveChatLogs();
+      
+      const persistentChats = JSON.parse(localStorage.getItem('ditto_chats_v1') || '{}');
+      if(!persistentChats[cid]) persistentChats[cid] = [];
+      
+      persistentChats[cid].push({ sender: sessionUser.uid, text: inp.value.trim() });
+      localStorage.setItem('ditto_chats_v1', JSON.stringify(persistentChats));
+      
+      inp.value = ""; 
+      renderActiveChatLogs();
     };
+
+    // Listen for Enter key to transmit messages smoothly
+    document.getElementById('chat-text-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') transmitChatMessage();
+    });
 
     const glow = document.getElementById("cursor-glow"); let cX = 0, cY = 0;
     window.addEventListener("mousemove", (e) => {
