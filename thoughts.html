@@ -55,12 +55,12 @@
   <div class="light" id="cursor-glow" aria-hidden="true"></div>
 
   <nav>
-    <div class="logo" onclick="window.location.href='Index.html'">Ditto.</div>
+    <div class="logo" onclick="window.location.href='index.html'">Ditto.</div>
     <div class="nav-links">
-      <button onclick="window.location.href='Index.html'">Home</button>
-      <button onclick="window.location.href='Thoughts.html'" class="active-nav">Thoughts</button>
-      <button onclick="window.location.href='Dittos.html'">Dittos</button>
-      <button onclick="window.location.href='Profiles.html'">Profile</button>
+      <button onclick="window.location.href='index.html'">Home</button>
+      <button onclick="window.location.href='thoughts.html'" class="active-nav">Thoughts</button>
+      <button onclick="window.location.href='dittos.html'">Dittos</button>
+      <button onclick="window.location.href='profiles.html'">Profile</button>
     </div>
   </nav>
 
@@ -107,7 +107,7 @@
     };
 
     onAuthStateChanged(auth, (user) => {
-      if (!user) { window.location.href = 'Login.html'; return; }
+      if (!user) { window.location.href = 'login.html'; return; }
       sessionUser = user;
       loadThoughtsPipeline();
     });
@@ -198,7 +198,7 @@
         <div style="background:rgba(255,255,255,0.02); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
           <h4>${target.avatar} ${target.name}</h4>
           <h2 style="color:#10b981; font-size:26px; margin: 5px 0;">${score}% Match</h2>
-          <button class="btn" style="width:100%; margin-top:5px; font-size:13px; padding:8px;" onclick="window.location.href='Dittos.html'">Open Neural Path</button>
+          <button class="btn" style="width:100%; margin-top:5px; font-size:13px; padding:8px;" onclick="window.location.href='dittos.html'">Open Neural Path</button>
         </div>`;
     };
 
