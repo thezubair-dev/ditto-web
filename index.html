@@ -220,16 +220,10 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    onAuthStateChanged(auth, (user) => {
-    if (user) {
-        window.location.href = "profile.html";
-    }
-});
-    
+    // Standalone Global Session Auth Route Check
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        document.getElementById("hero-action-btn").setAttribute("onclick", "window.location.href='thoughts.html'");
-        document.getElementById("hero-action-btn").innerText = "Find My Ditto ✨";
+        window.location.href = "profile.html";
       }
     });
 
