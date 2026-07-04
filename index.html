@@ -1,298 +1,896 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ditto | Neural Connectivity Network</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-    }
 
-    body {
-      background: #050510;
-      color: white;
-      min-height: 100vh;
-      overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+<meta charset="UTF-8">
 
-    .bg {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      background: 
-        radial-gradient(circle at 20% 20%, #8b5cf6, transparent 25%),
-        radial-gradient(circle at 80% 30%, #06b6d4, transparent 25%),
-        radial-gradient(circle at 50% 90%, #10b981, transparent 25%);
-      filter: blur(80px);
-      animation: bgMove 8s infinite alternate ease-in-out;
-    }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    @keyframes bgMove {
-      100% { transform: scale(1.1); }
-    }
+<title>Ditto | Meet Minds</title>
 
-    .light {
-      position: fixed;
-      width: 250px;
-      height: 250px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: -1;
-      top: 0;
-      left: 0;
-      will-change: transform;
-    }
 
-    nav {
-      height: 80px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 8%;
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.3s ease;
-    }
+<style>
 
-    .logo {
-      font-size: 32px;
-      font-weight: 900;
-      background: linear-gradient(90deg, #a855f7, #06b6d4, #10b981);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      color: transparent;
-      cursor: pointer;
-    }
 
-    .nav-links {
-      display: flex;
-      gap: 10px;
-    }
+*{
 
-    .nav-links button {
-      padding: 10px 22px;
-      border-radius: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.03);
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      font-size: 14px;
-    }
+margin:0;
 
-    .nav-links button:hover {
-      background: #10b981;
-      border-color: transparent;
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
-      transform: translateY(-3px);
-    }
+padding:0;
 
-    .nav-links button.active-nav {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: #06b6d4;
-    }
+box-sizing:border-box;
 
-    .hero-section {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 8%;
-    }
+font-family:'Segoe UI',
+-apple-system,
+BlinkMacSystemFont,
+Roboto,
+sans-serif;
 
-    h1 {
-      font-size: 56px;
-      font-weight: 800;
-      letter-spacing: -1.5px;
-      line-height: 1.1;
-      margin-bottom: 20px;
-      max-width: 800px;
-    }
+}
 
-    h1 span {
-      background: linear-gradient(90deg, #06b6d4, #8b5cf6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
 
-    p {
-      color: #94a3b8;
-      font-size: 18px;
-      line-height: 1.6;
-      max-width: 600px;
-      margin-bottom: 35px;
-    }
 
-    .btn {
-      display: inline-block;
-      padding: 16px 36px;
-      border-radius: 40px;
-      border: none;
-      font-size: 16px;
-      font-weight: 600;
-      background: linear-gradient(90deg, #8b5cf6, #06b6d4);
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-      text-decoration: none;
-      width: auto;
-    }
+html,body{
 
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
-    }
+width:100%;
 
-    /* --- Smart Phone Media Queries --- */
-    @media (max-width: 768px) {
-      nav {
-        height: auto;
-        padding: 15px 5%;
-        flex-direction: column;
-        gap: 15px;
-      }
+overflow-x:hidden;
 
-      .logo {
-        font-size: 28px;
-      }
+}
 
-      .nav-links {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
 
-      .nav-links button {
-        padding: 8px 16px;
-        font-size: 13px;
-        flex: 1;
-        min-width: 80px;
-        text-align: center;
-      }
 
-      .hero-section {
-        padding: 60px 5% 40px 5%;
-        justify-content: flex-start;
-        margin-top: 0;
-      }
 
-      h1 {
-        font-size: 34px;
-        letter-spacing: -0.8px;
-        margin-bottom: 15px;
-      }
+body{
 
-      p {
-        font-size: 15px;
-        margin-bottom: 30px;
-      }
+background:#050510;
 
-      .btn {
-        width: 100%;
-        max-width: 280px;
-        padding: 14px 24px;
-        font-size: 15px;
-      }
+color:white;
 
-      /* Disable tracking light on mobile devices for optimized scrolling performance */
-      .light {
-        display: none !important;
-      }
-    }
-  </style>
+min-height:100vh;
+
+min-height:100dvh;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+
+
+
+/* BACKGROUND */
+
+
+.bg{
+
+position:fixed;
+
+inset:0;
+
+z-index:-2;
+
+
+background:
+
+radial-gradient(circle at 20% 20%,#8b5cf6,transparent 25%),
+
+radial-gradient(circle at 80% 30%,#06b6d4,transparent 25%),
+
+radial-gradient(circle at 50% 90%,#10b981,transparent 25%);
+
+
+filter:blur(80px);
+
+
+animation:bgMove 8s infinite alternate ease-in-out;
+
+}
+
+
+
+
+@keyframes bgMove{
+
+
+100%{
+
+transform:scale(1.1);
+
+}
+
+
+}
+
+
+
+
+.light{
+
+position:fixed;
+
+width:250px;
+
+height:250px;
+
+background:rgba(255,255,255,.1);
+
+border-radius:50%;
+
+filter:blur(80px);
+
+pointer-events:none;
+
+z-index:-1;
+
+}
+
+
+
+
+/* NAVBAR */
+
+
+nav{
+
+height:80px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:0 8%;
+
+
+background:rgba(255,255,255,.04);
+
+backdrop-filter:blur(25px);
+
+-webkit-backdrop-filter:blur(25px);
+
+
+position:sticky;
+
+top:0;
+
+z-index:10;
+
+
+border-bottom:1px solid rgba(255,255,255,.05);
+
+}
+
+
+
+
+.logo{
+
+font-size:32px;
+
+font-weight:900;
+
+
+background:linear-gradient(
+90deg,#a855f7,#06b6d4,#10b981
+);
+
+
+-webkit-background-clip:text;
+
+-webkit-text-fill-color:transparent;
+
+cursor:pointer;
+
+}
+
+
+
+
+.nav-links{
+
+display:flex;
+
+gap:10px;
+
+}
+
+
+
+
+.nav-links button{
+
+padding:10px 22px;
+
+border-radius:30px;
+
+
+border:1px solid rgba(255,255,255,.1);
+
+
+background:rgba(255,255,255,.03);
+
+
+color:white;
+
+cursor:pointer;
+
+transition:.3s;
+
+font-size:14px;
+
+}
+
+
+
+
+.nav-links button:hover{
+
+background:#10b981;
+
+box-shadow:0 0 20px rgba(16,185,129,.5);
+
+transform:translateY(-3px);
+
+}
+
+
+
+
+.active-nav{
+
+background:rgba(255,255,255,.12)!important;
+
+border-color:#06b6d4!important;
+
+}
+
+
+
+
+/* HERO */
+
+
+.hero-section{
+
+flex:1;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+flex-direction:column;
+
+text-align:center;
+
+padding:60px 8%;
+
+}
+
+
+
+
+h1{
+
+font-size:56px;
+
+font-weight:800;
+
+max-width:850px;
+
+line-height:1.1;
+
+letter-spacing:-1px;
+
+margin-bottom:20px;
+
+}
+
+
+
+/* RESTORED COLORFUL TEXT */
+
+h1 span{
+
+
+background:linear-gradient(
+90deg,#06b6d4,#8b5cf6,#10b981
+);
+
+
+-webkit-background-clip:text;
+
+
+-webkit-text-fill-color:transparent;
+
+
+}
+
+
+
+
+
+p{
+
+font-size:18px;
+
+color:#94a3b8;
+
+max-width:600px;
+
+line-height:1.6;
+
+margin-bottom:35px;
+
+}
+
+
+
+
+.btn{
+
+display:inline-block;
+
+padding:16px 36px;
+
+border-radius:40px;
+
+
+background:linear-gradient(
+90deg,#8b5cf6,#06b6d4
+);
+
+
+color:white;
+
+text-decoration:none;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+
+
+
+.btn:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 10px 30px #8b5cf6;
+
+}
+/* MOBILE RESPONSIVE */
+
+@media(max-width:768px){
+
+
+nav{
+
+height:auto;
+
+padding:18px 5%;
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+
+
+.logo{
+
+font-size:30px;
+
+}
+
+
+
+
+.nav-links{
+
+width:100%;
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:10px;
+
+}
+
+
+
+
+.nav-links button{
+
+width:100%;
+
+padding:10px;
+
+font-size:13px;
+
+}
+
+
+
+
+.hero-section{
+
+padding:60px 20px;
+
+justify-content:flex-start;
+
+}
+
+
+
+
+h1{
+
+font-size:clamp(34px,10vw,45px);
+
+line-height:1.15;
+
+word-break:break-word;
+
+}
+
+
+
+p{
+
+font-size:15px;
+
+width:100%;
+
+}
+
+
+
+.btn{
+
+width:100%;
+
+max-width:300px;
+
+text-align:center;
+
+}
+
+
+
+
+.light{
+
+display:none;
+
+}
+
+
+
+.bg{
+
+filter:blur(50px);
+
+}
+
+
+
+}
+
+
+
+</style>
+
 </head>
+
+
+
 <body>
 
-  <div class="bg" aria-hidden="true"></div>
-  <div class="light" id="cursor-glow" aria-hidden="true"></div>
 
-  <nav>
-    <div class="logo" id="logo-redirect">Ditto.</div>
-    <div class="nav-links" id="dynamic-nav-links">
-      <button onclick="window.location.href='login.html'">Sign In</button>
-    </div>
-  </nav>
 
-  <main class="hero-section">
-    <h1>Quantify and Synchronize Your <span>Neural Persona Matrix</span></h1>
-    <p>Broadcast structural fragments of unfiltered thought vectors. Map compatibility scores cleanly using advanced cross-matching linear weights instantly.</p>
-    <div id="hero-action-container">
-      <a href="login.html" class="btn">Initialize Your Profile</a>
-    </div>
-  </main>
+<div class="bg"></div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+<div class="light" id="cursor-glow"></div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCRU2XnvDbSMKlOqAMijcUGYPC4RKg9nPM",
-      authDomain: "dittoweb.firebaseapp.com",
-      projectId: "dittoweb",
-      storageBucket: "dittoweb.firebasestorage.app",
-      messagingSenderId: "902164300349",
-      appId: "1:902164300349:web:307e58ba6e3e9dbc33a054",
-      measurementId: "G-JP34BSJ3RB"
-    };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
 
-    onAuthStateChanged(auth, (user) => {
-      const navLinks = document.getElementById("dynamic-nav-links");
-      const heroAction = document.getElementById("hero-action-container");
-      const logoLink = document.getElementById("logo-redirect");
 
-      if (user) {
-        logoLink.onclick = () => { window.location.href = 'thoughts.html'; };
 
-        navLinks.innerHTML = `
-          <button onclick="window.location.href='thoughts.html'" id="nav-feed">Thoughts</button>
-          <button onclick="window.location.href='dittos.html'" id="nav-dittos">Dittos</button>
-          <button onclick="window.location.href='profile.html'" id="nav-profile">Profile</button>
-        `;
+<nav>
 
-        heroAction.innerHTML = `
-          <a href="thoughts.html" class="btn">Enter Thought Universe</a>
-        `;
-      } else {
-        logoLink.onclick = () => { window.location.href = 'index.html'; };
 
-        navLinks.innerHTML = `
-          <button onclick="window.location.href='login.html'" class="active-nav">Sign In</button>
-        `;
 
-        heroAction.innerHTML = `
-          <a href="login.html" class="btn">Initialize Your Profile</a>
-        `;
-      }
-    });
+<div class="logo" id="logo-redirect">
 
-    // Custom Mousemove Listener (Only triggers rendering cycles on desktop/pointer hardware)
-    const glow = document.getElementById("cursor-glow"); let cX = 0, cY = 0;
-    if (window.matchMedia("(pointer: fine)").matches) {
-      window.addEventListener("mousemove", (e) => {
-        cX = e.clientX - 125; cY = e.clientY - 125;
-        requestAnimationFrame(() => { glow.style.transform = `translate3d(${cX}px, ${cY}px, 0)`; });
-      });
-    }
-  </script>
+Ditto.
+
+</div>
+
+
+
+
+<div class="nav-links" id="dynamic-nav-links">
+
+
+<button onclick="window.location.href='index.html'" class="active-nav">
+
+Home
+
+</button>
+
+
+
+<button onclick="window.location.href='login.html'">
+
+Sign In
+
+</button>
+
+
+
+</div>
+
+
+</nav>
+
+
+
+
+
+
+
+<main class="hero-section">
+
+
+
+<h1>
+
+Ever felt the world doesn't
+
+<span>
+
+understand you..
+
+</span>
+
+
+</h1>
+
+
+
+
+<p>
+
+Not anymore. Connect with like minded people.
+
+</p>
+
+
+
+
+
+
+<div id="hero-action-container">
+
+
+<a href="login.html" class="btn">
+
+Find my Ditto ✨
+
+</a>
+
+
+</div>
+
+
+
+</main>
+
+
+
+
+
+
+
+
+<script type="module">
+
+
+import { initializeApp } 
+from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+
+
+
+import {
+
+getAuth,
+
+onAuthStateChanged
+
+}
+
+from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+
+
+
+
+
+const firebaseConfig={
+
+
+apiKey:"AIzaSyCRU2XnvDbSMKlOqAMijcUGYPC4RKg9nPM",
+
+
+authDomain:"dittoweb.firebaseapp.com",
+
+
+projectId:"dittoweb",
+
+
+storageBucket:"dittoweb.firebasestorage.app",
+
+
+messagingSenderId:"902164300349",
+
+
+appId:"1:902164300349:web:307e58ba6e3e9dbc33a054",
+
+
+measurementId:"G-JP34BSJ3RB"
+
+
+};
+
+
+
+
+
+
+const app = initializeApp(firebaseConfig);
+
+
+const auth = getAuth(app);
+
+
+
+
+
+
+
+onAuthStateChanged(auth,(user)=>{
+
+
+
+const navLinks =
+document.getElementById("dynamic-nav-links");
+
+
+
+const heroAction =
+document.getElementById("hero-action-container");
+
+
+
+const logo =
+document.getElementById("logo-redirect");
+
+
+
+
+
+
+
+if(user){
+
+
+
+logo.onclick=()=>{
+
+window.location.href="index.html";
+
+};
+
+
+
+
+
+navLinks.innerHTML=`
+
+
+<button onclick="window.location.href='index.html'" class="active-nav">
+
+Home
+
+</button>
+
+
+
+<button onclick="window.location.href='thoughts.html'">
+
+Thoughts
+
+</button>
+
+
+
+<button onclick="window.location.href='dittos.html'">
+
+Dittos
+
+</button>
+
+
+
+<button onclick="window.location.href='profile.html'">
+
+Profile
+
+</button>
+
+
+`;
+
+
+
+
+
+
+heroAction.innerHTML=`
+
+
+<a href="thoughts.html" class="btn">
+
+Find my Ditto ✨
+
+</a>
+
+
+`;
+
+
+
+}
+
+
+
+
+
+
+else{
+
+
+
+logo.onclick=()=>{
+
+window.location.href="index.html";
+
+};
+
+
+
+
+
+navLinks.innerHTML=`
+
+
+<button onclick="window.location.href='index.html'" class="active-nav">
+
+Home
+
+</button>
+
+
+
+<button onclick="window.location.href='login.html'">
+
+Sign In
+
+</button>
+
+
+`;
+
+
+
+
+
+
+heroAction.innerHTML=`
+
+
+<a href="login.html" class="btn">
+
+Find my Ditto ✨
+
+</a>
+
+
+`;
+
+
+
+}
+
+
+
+});
+
+
+
+
+
+
+
+
+
+/* CURSOR GLOW */
+
+
+const glow =
+
+document.getElementById("cursor-glow");
+
+
+
+let cX=0;
+
+let cY=0;
+
+
+
+
+if(window.matchMedia("(pointer:fine)").matches){
+
+
+
+window.addEventListener("mousemove",(e)=>{
+
+
+
+cX=e.clientX-125;
+
+
+cY=e.clientY-125;
+
+
+
+
+requestAnimationFrame(()=>{
+
+
+glow.style.transform=
+
+`translate3d(${cX}px,${cY}px,0)`;
+
+
+});
+
+
+
+});
+
+
+
+}
+
+
+
+</script>
+
+
+
 </body>
+
+
 </html>
